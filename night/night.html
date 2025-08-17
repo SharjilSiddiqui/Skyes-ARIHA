@@ -857,4 +857,16 @@
                 mutations.forEach(mutation => {
                     if (mutation.attributeName === 'class' && mutation.target.classList.contains('open')) {
                         const panelId = mutation.target.id;
-                        s
+                        setupCarousel(document.getElementById(panelId));
+                    }
+                });
+            });
+
+            document.querySelectorAll('.overlay-panel').forEach(panel => {
+                panelObserver.observe(panel, { attributes: true });
+            });
+        });
+    </script>
+</body>
+
+</html>
