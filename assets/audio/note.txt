@@ -1,0 +1,13 @@
+Since direct downloads are failing due to 403 Forbidden errors, we'll use a different approach:
+
+1. We'll create an audio element in the HTML that uses a data URI for a very small audio file
+2. For a production site, you should replace this with a proper audio file by:
+   - Manually downloading a royalty-free music file
+   - Placing it in this directory
+   - Updating the audio src attribute in the HTML files
+
+Royalty-free music sources:
+- Pixabay Audio (https://pixabay.com/music/)
+- Free Music Archive (https://freemusicarchive.org/)
+- Bensound (https://www.bensound.com/)
+- ccMixter (http://ccmixter.org/)

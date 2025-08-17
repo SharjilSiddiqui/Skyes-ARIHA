@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Skyes ARIHA</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="manifest" href="/assets/site.webmanifest">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script src="lib/tdvplayer.js?v=1755369032916"></script>
+
+    <script type="text/javascript">
+        var player;
+        var isAudioMuted = true;
+
+        function loadTour() {
+            if (player) return;
+            var settings = new TDV.PlayerSettings();
+            settings.set(TDV.PlayerSettings.CONTAINER, document.getElementById('viewer'));
+            settings.set(TDV.PlayerSettings.SCRIPT_URL, 'script.js?v=1755369032916');
+            window.tdvplayer = player = TDV.PlayerAPI.create(settings);
+
+            player.bindOnObject('rootPlayer', 'start', function () {
+                setMediaByIndex(0);
+            }, player, false);
+        }
+
+        function getRootPlayer() {
+            return window.tdvplayer !== undefined ? window.tdvplayer.getById('rootPlayer') : undefined;
+        }
+
+        function setMediaByIndex(index) {
+            var rootPlayer = getRootPlayer();
+            if (rootPlayer) rootPlayer.setMainMediaByIndex(index);
+        }
+
+        function onLoad() {
+            loadTour();
+        }
+
+        function toggleFullscreen() {
+            let elem = document.documentElement;
+            if (!document.fullscreenElement) elem.requestFullscreen();
+            else document.exitFullscreen();
+        }
+
+        function toggleAudio() {
+            var audio = document.getElementById('background-audio');
+            var audioButtonIcon = document.querySelector('.audio-btn i');
+
+            isAudioMuted = !isAudioMuted;
+
+            if (isAudioMuted) {
+                audio.muted = true;
+                audioButtonIcon.className = 'fa-solid fa-volume-xmark';
+            } else {
+                audio.muted = false;
+                audio.play();
+                audioButtonIcon.className = 'fa-solid fa-volume-high';
+            }
+        }
+
+        function togglePanel(panelId) {
+            document.querySelectorAll('.overlay-panel').forEach(p => {
+                if (p.id === panelId && !p.classList.contains('open')) {
+                    p.classList.add('open');
+                    if (p.querySelector('.carousel')) {
+                        setupCarousel(p.id);
+                    }
+                } else {
+                    p.classList.remove('open');
+                }
+            });
+        }
+
+        function closePanels() {
+            document.querySelectorAll('.overlay-panel').forEach(p => p.classList.remove('open'));
+        }
+
+        function setupCarousel(panelId) {
+            const panel = document.getElementById(panelId);
+            const track = panel.querySelector('.carousel-track');
+            if (!track) return;
+
+            const slides = Array.from(track.children);
+            const nextButton = panel.querySelector('.carousel-btn.next');
+            const prevButton = panel.querySelector('.carousel-btn.prev');
+            let currentIndex = 0;
+
+            track.style.transform = `translateX(0)`;
+
+            function updateCarousel() {
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            }
+
+            if (nextButton) {
+                nextButton.onclick = () => {
+                    currentIndex = (currentIndex + 1) % slides.length;
+                    updateCarousel();
+                };
+            }
+
+            if (prevButton) {
+                prevButton.onclick = () => {
+                    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                    updateCarousel();
+                };
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --primary-color: #800040;
+            --primary-hover: #c00064;
+            --text-color: white;
+            --overlay-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        #viewer {
+            background-color: #000;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        /* Logos */
+        #companyLogo,
+        #buildingLogo {
+            position: absolute;
+            top: 20px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        #companyLogo {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #buildingLogo {
+            right: 20px;
+        }
+
+        #companyLogo img,
+        #buildingLogo img {
+            max-height: 140px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Left vertical buttons */
+        #leftControls {
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        /* Unified styles for all primary control buttons */
+        #leftControls button,
+        #controls button {
+            background: rgba(128, 0, 64, 0.8);
+            border: none;
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        #leftControls button:hover,
+        #controls button:hover {
+            background: #c00064;
+            transform: scale(1.1);
+        }
+        
+        /* Specific styles for time controls */
+        #timeControls button {
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        #timeControls button:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: translateY(-2px);
+        }
+
+        /* Bottom right controls */
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 12px;
+            z-index: 1000;
+        }
+        
+        /* Bottom center time buttons */
+        #timeControls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        /* Overlays & Close Button */
+        .overlay-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--overlay-bg);
+            z-index: 2000;
+            padding: 40px;
+            display: none;
+            overflow-y: auto;
+            animation: fadeIn 0.4s ease;
+            box-sizing: border-box;
+        }
+
+        .overlay-panel.open {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .overlay-panel h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .overlay-panel .close-btn {
+            background: none;
+            border: none;
+            font-size: 3rem;
+            cursor: pointer;
+            color: var(--primary-color);
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            transition: transform 0.3s;
+            z-index: 2100;
+        }
+
+        .overlay-panel .close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        /* Apt buttons inside overlay */
+        .apt-buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-top: 30px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .apt-buttons button {
+            padding: 25px 35px;
+            font-size: 1.5rem;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            background: var(--primary-color);
+            color: var(--text-color);
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .apt-buttons button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Floor plan and Gallery styles */
+        .floorplan-img {
+            max-width: 800px;
+            width: 100%;
+            margin: 20px auto;
+            display: block;
+            border: 2px solid var(--primary-color);
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* General carousel styles */
+        .carousel {
+            position: relative;
+            max-width: 90%;
+            margin: 30px auto;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .carousel-track {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .carousel img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 0;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .carousel-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-btn.prev {
+            left: 15px;
+        }
+
+        .carousel-btn.next {
+            right: 15px;
+        }
+
+        /* Specific styles for gallery carousel */
+        #galleryPanel .carousel-container {
+            padding-top: 56.25%;
+        }
+
+        /* Specific styles for floor plan carousel */
+        #floorplanPanel .carousel-container {
+            padding-top: 120%;
+        }
+
+        #floorplanPanel .carousel img {
+            object-fit: contain;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 1200px) {
+            #companyLogo img,
+            #buildingLogo img {
+                max-height: 120px;
+            }
+
+            #leftControls button,
+            #controls button {
+                width: 52px;
+                height: 52px;
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            #companyLogo img,
+            #buildingLogo img {
+                max-height: 100px;
+            }
+            
+            #leftControls {
+                left: 15px;
+                gap: 12px;
+            }
+
+            #leftControls button {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            #controls {
+                right: 15px;
+                gap: 10px;
+            }
+
+            #controls button {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            #timeControls {
+                gap: 15px;
+            }
+
+            #timeControls button {
+                padding: 12px 18px;
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #companyLogo {
+                left: 50%;
+                transform: translateX(-50%) scale(0.8);
+                top: 10px;
+            }
+
+            #buildingLogo {
+                right: 10px;
+                top: 10px;
+                transform: scale(0.8);
+            }
+
+            #companyLogo img,
+            #buildingLogo img {
+                max-height: 80px;
+            }
+
+            #leftControls {
+                left: 10px;
+                gap: 10px;
+                top: 45%;
+            }
+
+            #leftControls button {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+
+            #controls {
+                right: 10px;
+                gap: 8px;
+                bottom: 15px;
+            }
+
+            #controls button {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+
+            #timeControls {
+                gap: 8px;
+                bottom: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+                max-width: 90%;
+            }
+
+            #timeControls button {
+                padding: 10px 15px;
+                font-size: 14px;
+                border-radius: 25px;
+                white-space: nowrap;
+            }
+
+            .overlay-panel {
+                padding: 20px;
+            }
+
+            .overlay-panel h2 {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            .overlay-panel .close-btn {
+                font-size: 2rem;
+                top: 5px;
+                right: 15px;
+            }
+
+            .apt-buttons {
+                flex-direction: column;
+                align-items: center;
+                margin-top: 20px;
+                gap: 15px;
+                max-width: 280px;
+            }
+
+            .apt-buttons button {
+                padding: 18px 30px;
+                font-size: 1.2rem;
+                width: 100%;
+                max-width: 200px;
+            }
+
+            .carousel {
+                max-width: 95%;
+                margin: 20px auto;
+            }
+
+            .carousel-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .carousel-btn.prev {
+                left: 10px;
+            }
+
+            .carousel-btn.next {
+                right: 10px;
+            }
+
+            #galleryPanel .carousel-container {
+                padding-top: 75%;
+            }
+
+            #floorplanPanel .carousel-container {
+                padding-top: 140%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #companyLogo {
+                transform: translateX(-50%) scale(0.7);
+                top: 5px;
+            }
+
+            #buildingLogo {
+                transform: scale(0.7);
+                top: 5px;
+                right: 5px;
+            }
+
+            #companyLogo img,
+            #buildingLogo img {
+                max-height: 60px;
+            }
+
+            #leftControls {
+                left: 8px;
+                gap: 8px;
+                top: 40%;
+            }
+
+            #leftControls button {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            #controls {
+                right: 8px;
+                gap: 6px;
+                bottom: 12px;
+            }
+
+            #controls button {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            #timeControls {
+                gap: 6px;
+                bottom: 12px;
+                max-width: 95%;
+            }
+
+            #timeControls button {
+                padding: 8px 12px;
+                font-size: 12px;
+                border-radius: 20px;
+            }
+
+            .overlay-panel {
+                padding: 15px;
+            }
+
+            .overlay-panel h2 {
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+
+            .apt-buttons {
+                margin-top: 15px;
+                gap: 12px;
+            }
+
+            .apt-buttons button {
+                padding: 15px 25px;
+                font-size: 1.1rem;
+            }
+
+            .carousel-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+
+            .carousel-btn.prev {
+                left: 8px;
+            }
+
+            .carousel-btn.next {
+                right: 8px;
+            }
+
+            #floorplanPanel .carousel-container {
+                padding-top: 160%;
+            }
+        }
+
+        @media (max-height: 600px) {
+            #leftControls {
+                top: 50%;
+                gap: 8px;
+            }
+
+            #leftControls button {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            #controls button {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            #timeControls button {
+                padding: 8px 15px;
+                font-size: 13px;
+            }
+        }
+
+        @media (orientation: landscape) and (max-height: 500px) {
+            #companyLogo {
+                transform: translateX(-50%) scale(0.6);
+                top: 5px;
+            }
+
+            #buildingLogo {
+                transform: scale(0.6);
+                top: 5px;
+            }
+
+            #leftControls {
+                top: 50%;
+                gap: 6px;
+            }
+
+            #leftControls button {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+
+            #controls button {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+
+            #timeControls button {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+        
+        @media (min-width: 1920px) {
+            #companyLogo img,
+            #buildingLogo img {
+                max-height: 160px;
+            }
+
+            #leftControls button,
+            #controls button {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+
+            #timeControls button {
+                padding: 16px 24px;
+                font-size: 18px;
+            }
+
+            .overlay-panel h2 {
+                font-size: 2.5rem;
+            }
+
+            .apt-buttons button {
+                padding: 30px 40px;
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (pointer: coarse) {
+            #leftControls button,
+            #controls button,
+            #timeControls button,
+            .carousel-btn,
+            .apt-buttons button {
+                min-width: 44px;
+                min-height: 44px;
+            }
+        }
+    </style>
+</head>
+
+<body onload="onLoad()">
+    <audio id="background-audio" loop muted>
+        <source src="./assets/audio/audio.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div id="viewer"></div>
+
+    <div id="leftControls">
+        <button onclick="window.location.href='/project/project.html'"><i class="fa-solid fa-vr-cardboard"></i></button>
+        <button onclick="togglePanel('apartmentsPanel')"><i class="fa-solid fa-building"></i></button>
+        <button onclick="togglePanel('floorplanPanel')"><i class="fa-solid fa-layer-group"></i></button>
+        <button onclick="togglePanel('galleryPanel')"><i class="fa-solid fa-images"></i></button>
+    </div>
+
+    <div id="apartmentsPanel" class="overlay-panel">
+        <button class="close-btn" onclick="closePanels()"><i class="fa-solid fa-xmark"></i></button>
+        <h2>Select Apartment</h2>
+        <div class="apt-buttons">
+            <button onclick="window.location.href='/3bhk/3bhk 17th floor/3bhk 17th floor.html'">3 BHK</button>
+            <button onclick="window.location.href='/4bhk/4bhk 17th floor/4bhk 17th floor.html'">4 BHK</button>
+        </div>
+    </div>
+
+    <div id="floorplanPanel" class="overlay-panel">
+        <button class="close-btn" onclick="closePanels()"><i class="fa-solid fa-xmark"></i></button>
+        <h2>Floor Plan</h2>
+        <div class="carousel">
+            <div class="carousel-container">
+                <div class="carousel-track">
+                    <img src="assets/floorplans/Ground Floor.png" alt="Ground Floor Plan">
+                    <img src="assets/floorplans/3BHK_Typical Floor_Without Text.png" alt="Floor Plan 3 BHK">
+                    <img src="assets/floorplans/4BHK_Typical Floor_Without Text.png" alt="Floor Plan 4 BHK">
+                </div>
+            </div>
+            <button class="carousel-btn prev" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="carousel-btn next" aria-label="Next Slide"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <div id="galleryPanel" class="overlay-panel">
+        <button class="close-btn" onclick="closePanels()"><i class="fa-solid fa-xmark"></i></button>
+        <h2>Gallery</h2>
+        <div class="carousel">
+            <div class="carousel-container">
+                <div class="carousel-track">
+                    <img src="assets/renders/day.jpg" alt="Gallery 1">
+                    <img src="assets/renders/night.jpg" alt="Gallery 2">
+                    <img src="assets/renders/evening.jpg" alt="Gallery 3">
+                </div>
+            </div>
+            <button class="carousel-btn prev" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="carousel-btn next" aria-label="Next Slide"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <div id="controls">
+        <button onclick="window.location.href='/day.html'"><i class="fa-solid fa-house"></i></button>
+        <button onclick="toggleFullscreen()"><i class="fa-solid fa-expand"></i></button>
+        <button onclick="toggleAudio()" class="audio-btn"><i class="fa-solid fa-volume-xmark"></i></button>
+    </div>
+
+    <div id="timeControls">
+        <button onclick="window.location.href='day.html'"><i class="fa-solid fa-sun"></i> Day</button>
+        <button onclick="window.location.href='evening/evening.html'"><i class="fa-solid fa-cloud-sun"></i> Evening</button>
+        <button onclick="window.location.href='night/night.html'"><i class="fa-solid fa-moon"></i> Night</button>
+    </div>
+
+    <div id="buildingLogo">
+        <img src="./assets/ARIHA logo.png" alt="Skyes ARIHA">
+    </div>
+    <div id="companyLogo">
+        <img src="./assets/Skyes_ARIHA.png" alt="ARIHA Logo">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            function setupCarousel(panel) {
+                const track = panel.querySelector('.carousel-track');
+                if (!track) return;
+
+                const slides = Array.from(track.children);
+                const nextButton = panel.querySelector('.carousel-btn.next');
+                const prevButton = panel.querySelector('.carousel-btn.prev');
+                let currentIndex = 0;
+
+                track.style.transform = `translateX(0)`;
+
+                function updateCarousel() {
+                    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                }
+
+                if (nextButton) {
+                    nextButton.onclick = () => {
+                        currentIndex = (currentIndex + 1) % slides.length;
+                        updateCarousel();
+                    };
+                }
+
+                if (prevButton) {
+                    prevButton.onclick = () => {
+                        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                        updateCarousel();
+                    };
+                }
+            }
+
+            const panelObserver = new MutationObserver(mutations => {
+                mutations.forEach(mutation => {
+                    if (mutation.attributeName === 'class' && mutation.target.classList.contains('open')) {
+                        const panelId = mutation.target.id;
+                        setupCarousel(document.getElementById(panelId));
+                    }
+                });
+            });
+
+            document.querySelectorAll('.overlay-panel').forEach(panel => {
+                panelObserver.observe(panel, { attributes: true });
+            });
+        });
+    </script>
+</body>
+
+</html>

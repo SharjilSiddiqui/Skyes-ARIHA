@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Landmarks</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=0.5, width=device-width, viewport-fit=cover" />
+    <link rel="preload" href="script.js?v=1755433220944" as="script"/>
+    <link rel="preload" href="media/panorama_BF51CE98_B406_070A_41E3_23A4B2087BB8_0/l/4/0_0.jpg?v=1755433220944" as="image"/>
+    <link rel="preload" href="media/panorama_BF51CE98_B406_070A_41E3_23A4B2087BB8_0/r/4/0_0.jpg?v=1755433220944" as="image"/>
+    <link rel="preload" href="media/panorama_BF51CE98_B406_070A_41E3_23A4B2087BB8_0/u/4/0_0.jpg?v=1755433220944" as="image"/>
+    <link rel="preload" href="media/panorama_BF51CE98_B406_070A_41E3_23A4B2087BB8_0/d/4/0_0.jpg?v=1755433220944" as="image"/>
+    <link rel="preload" href="media/panorama_BF51CE98_B406_070A_41E3_23A4B2087BB8_0/f/4/0_0.jpg?v=1755433220944" as="image"/>
+    <link rel="preload" href="media/panorama_BF51CE98_B406_070A_41E3_23A4B2087BB8_0/b/4/0_0.jpg?v=1755433220944" as="image"/>
+    <script>(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","//www.google-analytics.com/analytics.js","ga");ga("create", "UA-116087-3", "auto"); ga("send", "pageview");</script>
+    <meta name="description" content="Virtual Tour"/>
+    <meta name="theme-color" content="#FFFFFF"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="lib/tdvplayer.js?v=1755433220944"></script>
+    <script type="text/javascript">
+        var player;
+        var playersPlayingTmp = [];
+        var isInitialized = false;
+        var isPaused = false;
+        var isAudioMuted = true;
+
+        function loadTour() {
+            if(player) return;
+            var beginFunc = function(event){
+                if(event.name == 'begin') {
+                    var camera = event.data.source.get('camera');
+                    if(camera && camera.get('initialSequence') && camera.get('initialSequence').get('movements').length > 0)
+                        return;
+                }
+                if(event.sourceClassName == "MediaAudio") return;
+                isInitialized = true;
+                player.unbind('preloadMediaShow', beginFunc, player, true);
+                player.unbindOnObjectsOf('PanoramaPlayListItem', 'begin', beginFunc, player, true);
+                player.unbind('stateChange', beginFunc, player, true);
+                window.parent.postMessage("tourLoaded", '*');
+                disposePreloader();
+                onVirtualTourLoaded();
+            };
+
+            var settings = new TDV.PlayerSettings();
+            settings.set(TDV.PlayerSettings.CONTAINER, document.getElementById('viewer'));
+            settings.set(TDV.PlayerSettings.SCRIPT_URL, 'script.js?v=1755433220944');
+            settings.set(TDV.PlayerSettings.WEBVR_POLYFILL_URL, 'lib/WebVRPolyfill.js?v=1755433220944');
+            settings.set(TDV.PlayerSettings.HLS_URL, 'lib/Hls.js?v=1755433220944');
+            settings.set(TDV.PlayerSettings.QUERY_STRING_PARAMETERS, 'v=1755433220944');
+            window.tdvplayer = player = TDV.PlayerAPI.create(settings);
+            player.bind('preloadMediaShow', beginFunc, player, true);
+            player.bind('stateChange', beginFunc, player, true);
+            player.bindOnObjectsOf('PanoramaPlayListItem', 'begin', beginFunc, player, true);
+            player.bindOnObject('rootPlayer', 'start', function(e){
+                var queryDict = {}; location.search.substr(1).split("&").forEach(function(item) {var k = item.split("=")[0], v = decodeURIComponent(item.split("=")[1]);queryDict[k] = v});
+                var item = undefined;
+                if("media-index" in queryDict){
+                    item = setMediaByIndex(parseInt(queryDict["media-index"]) - 1);
+                }
+                else if("media-name" in queryDict){
+                    item = setMediaByName(queryDict["media-name"]);
+                }
+                else{
+                    item = setMediaByIndex(0);
+                }
+                if(item != undefined && "trigger-overlay-name" in queryDict){
+                    triggerOverlayByName(item, queryDict["trigger-overlay-name"], "trigger-overlay-event" in queryDict ? queryDict["trigger-overlay-event"] : "click");
+                }
+                player.getById('rootPlayer').bind('tourEnded', function(){
+                    onVirtualTourEnded();
+                }, player, true);
+            }, player, false);
+            window.addEventListener('message', function (e) {
+                var action = e.data;
+                if (action == 'pauseTour' || action == 'resumeTour') {
+                    this[action].apply(this);
+                }
+            });
+        }
+        function pauseTour() {
+            isPaused = true;
+            if(!isInitialized) return;
+            var playLists = player.getByClassName('PlayList');
+            for(var i = 0, count = playLists.length; i<count; i++) {
+                var playList = playLists[i];
+                var index = playList.get('selectedIndex');
+                if(index != -1) {
+                    var item = playList.get('items')[index];
+                    var itemPlayer = item.get('player');
+                    if(itemPlayer && itemPlayer.pause) {
+                        playersPlayingTmp.push(itemPlayer);
+                        itemPlayer.pause();
+                    }
+                }
+            }
+            player.getById('pauseGlobalAudios')();
+        }
+        function resumeTour() {
+            isPaused = false;
+            if(!isInitialized) return;
+            while(playersPlayingTmp.length) {
+                var viewer = playersPlayingTmp.pop();
+                viewer.play();
+            }
+            player.getById('resumeGlobalAudios')();
+        }
+        function onVirtualTourLoaded() {
+            if(isPaused) pauseTour();
+        }
+        function onVirtualTourEnded() {}
+        function getRootPlayer() {
+            return window.tdvplayer !== undefined ? window.tdvplayer.getById('rootPlayer') : undefined;
+        }
+        function setMediaByIndex(index) {
+            var rootPlayer = getRootPlayer();
+            if(rootPlayer !== undefined) {
+                return rootPlayer.setMainMediaByIndex(index);
+            }
+        }
+        function setMediaByName(name) {
+            var rootPlayer = getRootPlayer();
+            if(rootPlayer !== undefined) {
+                return rootPlayer.setMainMediaByName(name);
+            }
+        }
+        function triggerOverlayByName(item, name, eventName) {
+            var rootPlayer = getRootPlayer();
+            if(rootPlayer !== undefined) {
+                item.bind('begin', function(e){
+                    item.unbind('begin', arguments.callee, this);
+                    var overlay = rootPlayer.getPanoramaOverlayByName(item.get('media'), name);
+                    if(overlay)
+                        rootPlayer.triggerOverlay(overlay, eventName);
+                }, rootPlayer);
+            }
+        }
+        function navigateToScene(sceneName) {
+            if (player && isInitialized) {
+                setMediaByName(sceneName);
+                updateActiveSceneButton(sceneName);
+            }
+        }
+        function updateActiveSceneButton(activeScene) {
+            var sceneButtons = document.querySelectorAll('#sceneControls button');
+            sceneButtons.forEach(function(button) {
+                button.classList.remove('active');
+            });
+            var sceneMap = {
+                '4bhk_living_01@58': 'entrance',
+                '4bhk_living_02@58': 'living_room',
+                '4bhk_kitchen copy': 'kitchen',
+                '4BHK_BEDROOM01_2_58': 'bedroom_1',
+                '4BHK_BEDROOM02_point2_58': 'bedroom_2',
+                '4BHK_Bedroom03_point02 _58': 'bedroom_3',
+                '4BHK_BEDROOM_04_58': 'bedroom_4'
+            };
+            var mappedScene = sceneMap[activeScene] || activeScene;
+            var activeButton = document.querySelector('#sceneControls button[data-scene="' + mappedScene + '"]');
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
+        function toggleFullscreen() {
+            let elem = document.documentElement;
+            if (!document.fullscreenElement) {
+                elem.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        
+        function toggleAudio() {
+            var audio = document.getElementById('background-audio');
+            var audioButtonIcon = document.querySelector('.audio-btn i');
+            
+            // Toggle the muted state of the audio element
+            if (audio.muted) {
+                audio.muted = false;
+                audio.play(); 
+                audioButtonIcon.className = 'fa-solid fa-volume-high';
+            } else {
+                audio.muted = true;
+                audioButtonIcon.className = 'fa-solid fa-volume-xmark';
+            }
+        }
+
+        function goHome() {
+            window.location.href = '../../day.html';
+        }
+        function showPreloader() {
+            var preloadContainer = document.getElementById('preloadContainer');
+            if(preloadContainer != undefined)
+                preloadContainer.style.opacity = 1;
+        }
+        function disposePreloader() {
+            var preloadContainer = document.getElementById('preloadContainer');
+            if(preloadContainer == undefined) return;
+            var transitionEndName = transitionEndEventName();
+            if(transitionEndName) {
+                preloadContainer.addEventListener(transitionEndName, hide, false);
+                preloadContainer.style.opacity = 0;
+                setTimeout(hide, 500);
+            } else {
+                hide();
+            }
+            function hide() {
+                preloadContainer.style.visibility = 'hidden';
+                preloadContainer.style.display = 'none';
+            }
+            function transitionEndEventName () {
+                var el = document.createElement('div');
+                var transitions = {
+                    'transition':'transitionend',
+                    'OTransition':'otransitionend',
+                    'MozTransition':'transitionend',
+                    'WebkitTransition':'webkitTransitionEnd'
+                };
+                for (var t in transitions) {
+                    if (el.style[t] !== undefined) {
+                        return transitions[t];
+                    }
+                }
+                return undefined;
+            }
+        }
+        function onBodyClick(){
+            document.body.removeEventListener("click", onBodyClick);
+            document.body.removeEventListener("touchend", onBodyClick);
+            loadTour();
+        }
+        function onLoad() {
+            if (/AppleWebKit/.test(navigator.userAgent) && /Mobile\/\w+/.test(navigator.userAgent)) {
+                var inIFrame = false;
+                try {
+                    inIFrame = (window.self !== window.top);
+                } catch (e) {
+                    inIFrame = true;
+                }
+                if (!inIFrame) {
+                    var onResize = function(async) {
+                        [0, 250, 1000, 2000].forEach(function(delay) {
+                            setTimeout(function() {
+                                var viewer = document.querySelector('#viewer');
+                                var scale = window.innerWidth / document.documentElement.clientWidth;
+                                var width = document.documentElement.clientWidth;
+                                var height = Math.round(window.innerHeight / scale);
+                                viewer.style.width = width + 'px';
+                                viewer.style.height = height + 'px';
+                                viewer.style.left = Math.round((window.innerWidth - width) * 0.5) + 'px';
+                                viewer.style.top = Math.round((window.innerHeight - height) * 0.5) + 'px';
+                                viewer.style.transform = 'scale(' + scale + ', ' + scale + ')';
+                                window.scrollTo(0,0);
+                            }, delay);
+                        });
+                    };
+                    window.addEventListener('resize', onResize);
+                    onResize();
+                }
+            }
+            if (isOVRWeb()) {
+                showPreloader();
+                loadTour();
+                return;
+            }
+            showPreloader();
+            loadTour();
+        }
+        function playVideo(video) {
+            function isSafariDesktopV11orGreater() {
+                return /^((?!chrome|android|crios|ipad|iphone).)*safari/i.test(navigator.userAgent) && parseFloat(/Version\/([0-9]+\.[0-9]+)/i.exec(navigator.userAgent)[1]) >= 11;
+            }
+            function detectUserAction() {
+                var onVideoClick = function(e) {
+                    if(video.paused) {
+                        video.play();
+                    }
+                    video.muted = false;
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    video.removeEventListener('click', onVideoClick);
+                    video.removeEventListener('touchend', onVideoClick);
+                };
+                video.addEventListener("click", onVideoClick);
+                video.addEventListener("touchend", onVideoClick);
+            }
+            if (isSafariDesktopV11orGreater()) {
+                video.muted = true;
+                video.play();
+            } else {
+                var canPlay = true;
+                var promise = video.play();
+                if (promise) {
+                    promise.catch(function() {
+                        video.muted = true;
+                        video.play();
+                        detectUserAction();
+                    });
+                } else {
+                    canPlay = false;
+                }
+                if (!canPlay || video.muted) {
+                    detectUserAction();
+                }
+            }
+        }
+        function isOVRWeb(){
+            return window.location.hash.substring(1).split('&').indexOf('ovrweb') > -1;
+        }
+    </script>
+    <style type="text/css">
+        :root {
+            --primary-color: rgba(128, 0, 64, 0.8);
+            --primary-hover: rgba(128, 0, 64, 0.95);
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        #viewer {
+            background-color: #FFFFFF;
+            z-index: 1;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+        }
+
+        #preloadContainer {
+            z-index: 2;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.5s;
+            -webkit-transition: opacity 0.5s;
+            -moz-transition: opacity 0.5s;
+            -o-transition: opacity 0.5s;
+        }
+        
+        /* Top Left Controls */
+        #topLeftControls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+        }
+        
+        #topLeftControls img {
+            height: 100px;
+            width: auto;
+        }
+        
+        /* Top Right Controls */
+        #topRightControls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        #topRightControls img {
+            height: 100px;
+            width: auto;
+        }
+        
+        /* Bottom Left Controls */
+        #bottomLeftControls {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+        }
+        
+        #bottomLeftControls button {
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
+            min-width: fit-content;
+        }
+
+        #bottomLeftControls button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        #bottomLeftControls button.active {
+            background: var(--primary-hover);
+            box-shadow: 0 0 0 2px rgba(128, 0, 64, 0.4);
+        }
+        
+        /* Bottom Right Controls */
+        #bottomRightControls {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        #bottomRightControls button {
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #bottomRightControls button:hover {
+            background: var(--primary-hover);
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Scene Controls - Bottom Center */
+        #sceneControls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            max-width: 90%;
+            z-index: 1000;
+        }
+
+        #sceneControls button {
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
+            min-width: fit-content;
+        }
+
+        #sceneControls button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        #sceneControls button.active {
+            background: var(--primary-hover);
+            box-shadow: 0 0 0 2px rgba(128, 0, 64, 0.4);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            #topLeftControls {
+                top: 10px;
+                left: 10px;
+                gap: 10px;
+            }
+            #topLeftControls img,
+            #topRightControls img {
+                height: 45px;
+            }
+            #topRightControls {
+                top: 10px;
+                right: 10px;
+                gap: 10px;
+            }
+            #topRightControls button {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+            #bottomRightControls {
+                bottom: 20px;
+                right: 20px;
+                gap: 10px;
+            }
+            #bottomRightControls button {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+            #bottomLeftControls {
+                bottom: 20px;
+                left: 20px;
+                gap: 8px;
+            }
+            #bottomLeftControls button {
+                width: 50px;
+                height: 50px;
+                font-size: 12px;
+            }
+            #bottomLeftControls button i {
+                margin-right: 0;
+            }
+
+            #sceneControls {
+                bottom: 20px;
+                gap: 8px;
+                max-width: 95%;
+            }
+
+            #sceneControls button {
+                padding: 8px 12px;
+                font-size: 12px;
+                gap: 4px;
+            }
+        }
+    </style>
+    
+</head>
+
+<body onload="onLoad()">
+    <audio id="background-audio" loop muted>
+        <source src="../assets/audio/audio.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <div id="preloadContainer" style="background-color:rgba(255,255,255,1)">
+        <div style="z-index: 4; position: absolute; left: 0%; top: 50%; width: 100.00%; height: 10.00%">
+            <div style="text-align:left; color:#000; ">
+                <DIV STYLE="text-align:center;">
+                    <SPAN STYLE="letter-spacing:0vmin;color:#777777;font-size:1.39vmin;font-family:Arial, Helvetica, sans-serif;">Loading virtual tour. Please wait...</SPAN>
+                </DIV>
+                <p STYLE="margin:0; line-height:1.02vmin;">
+                    <BR STYLE="letter-spacing:0vmin;color:#000000;font-size:1.02vmin;font-family:Arial, Helvetica, sans-serif;"/>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="viewer"></div>
+
+    <div id="topLeftControls">
+        <img src="/assets/Skyes_ARIHA.png" alt="ARIHA Logo">
+    </div>
+
+    <div id="topRightControls">
+        <img src="/assets/ARIHA logo.png" alt="Skyes ARIHA">
+    </div>
+
+    <div id="bottomLeftControls">
+        <button onclick="window.location.href='/project/project.html'" class="active">
+            <i class="fa-solid fa-vr-cardboard"></i> 360
+        </button>
+        <button onclick="window.location.href='/LANDMARKS/landmarks.html'">
+            <i class="fa-solid fa-map-pin"></i> Landmarks
+        </button>
+    </div>
+    
+    <div id="bottomRightControls">
+        <button onclick="goHome()" title="Home">
+            <i class="fa-solid fa-home"></i>
+        </button>
+        <button onclick="toggleFullscreen()" title="Fullscreen">
+            <i class="fa-solid fa-expand"></i>
+        </button>
+        <button onclick="toggleAudio()" class="audio-btn" title="Toggle Audio">
+            <i class="fa-solid fa-volume-xmark"></i>
+        </button>
+    </div>
+</body>
+
+</html>
