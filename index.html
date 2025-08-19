@@ -98,12 +98,15 @@
 
         /* Floating circular utility buttons (bottom-right) */
         .utility-buttons {
-            position: absolute;
-            bottom: calc(20px + env(safe-area-inset-bottom));
-            right: 20px;
+            position: fixed;
+            /* instead of absolute */
+            bottom: 10px;
+            /* distance from bottom */
+            right: 10px;
+            /* distance from right */
             display: flex;
-            gap: 15px;
-            z-index: 5;
+            gap: 10px;
+            z-index: 9999;
         }
 
         .utility-btn {
