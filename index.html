@@ -99,7 +99,7 @@
         /* Floating circular utility buttons (bottom-right) */
         .utility-buttons {
             position: absolute;
-            bottom: 20px;
+            bottom: calc(20px + env(safe-area-inset-bottom));
             right: 20px;
             display: flex;
             gap: 15px;
@@ -240,6 +240,12 @@
                 height: 55px;
                 font-size: 1.4rem;
             }
+
+            .utility-buttons {
+                bottom: calc(25px + env(safe-area-inset-bottom));
+                right: 15px;
+                gap: 10px;
+            }
         }
     </style>
 </head>
@@ -289,8 +295,6 @@
     </div>
 
     <script>
-
-        let a = 1;
         // Audio toggle
         function toggleAudio() {
             const audio = document.getElementById("background-audio");
