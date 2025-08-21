@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>4 Bhk</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="manifest" href="/assets/site.webmanifest">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=0.5, width=device-width, viewport-fit=cover" />
+    <link rel="preload" href="script.js?v=1755693582282" as="script" />
+    <link rel="preload" href="media/panorama_CC48A826_C71D_4951_41E7_7F28A52014B9_0/l/2/0_0.jpg?v=1755693582282"
+        as="image" />
+    <link rel="preload" href="media/panorama_CC48A826_C71D_4951_41E7_7F28A52014B9_0/r/2/0_0.jpg?v=1755693582282"
+        as="image" />
+    <link rel="preload" href="media/panorama_CC48A826_C71D_4951_41E7_7F28A52014B9_0/u/2/0_0.jpg?v=1755693582282"
+        as="image" />
+    <link rel="preload" href="media/panorama_CC48A826_C71D_4951_41E7_7F28A52014B9_0/d/2/0_0.jpg?v=1755693582282"
+        as="image" />
+    <link rel="preload" href="media/panorama_CC48A826_C71D_4951_41E7_7F28A52014B9_0/f/2/0_0.jpg?v=1755693582282"
+        as="image" />
+    <link rel="preload" href="media/panorama_CC48A826_C71D_4951_41E7_7F28A52014B9_0/b/2/0_0.jpg?v=1755693582282"
+    as="image" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script>(function (i, s, o, g, r, a, m) { i["GoogleAnalyticsObject"] = r; i[r] = i[r] || function () { (i[r].q = i[r].q || []).push(arguments) }, i[r].l = 1 * new Date(); a = s.createElement(o), m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m) })(window, document, "script", "//www.google-analytics.com/analytics.js", "ga"); ga("create", "UA-116087-3", "auto"); ga("send", "pageview");</script>
+    <meta name="description" content="Virtual Tour" />
+    <meta name="theme-color" content="#FFFFFF" />
+    <script src="lib/tdvplayer.js?v=1755693582282"></script>
+    <script type="text/javascript">
+        var player;
+        var playersPlayingTmp = [];
+        var isInitialized = false;
+        var isPaused = false;
+        var SCENES = {
+            '17th': {
+                entrance: '4bhk living 01 17th',
+                hall: '4bhk living 02 17th',
+                kitchen: '4bhk kitchen ',
+                bedroom01_1: '4BHK BEDROOM 01 2 17th',
+                bedroom01_2: '4BHK BEDROOM 01 1 17th',
+                bedroom02_1: '4BHK BEDROOM 02 2 17th',
+                bedroom02_2: '4BHK BEDROOM 02 1 17th',
+                bedroom03_1: '4BHK BEDROOM 03 2 17th',
+                bedroom03_2: '4BHK BEDROOM 03 1 17th',
+                bedroom04_1: '4BHK BEDROOM 04 1 17th',
+                bedroom04_2: '4BHK BEDROOM 04 2 17th'
+            },
+            '23rd': {
+                entrance: '4bhk living 01 23rd',
+                hall: '4bhk living 02 23rd',
+                kitchen: '4bhk kitchen ',
+                bedroom01_1: '4BHK BEDROOM 01 2 23rd',
+                bedroom01_2: '4BHK BEDROOM 01 1 23rd',
+                bedroom02_1: '4BHK BEDROOM 02 2 23rd',
+                bedroom02_2: '4BHK BEDROOM 02 1 23rd',
+                bedroom03_1: '4BHK BEDROOM 03 2 23rd',
+                bedroom03_2: '4BHK BEDROOM 03 1 23rd',
+                bedroom04_1: '4BHK BEDROOM 04 1 23rd',
+                bedroom04_2: '4BHK BEDROOM 04 2 23rd'
+            },
+            '28th': {
+                entrance: '4bhk living 01 28th',
+                hall: '4bhk living 02 28th',
+                kitchen: '4bhk kitchen ',
+                bedroom01_1: '4BHK BEDROOM 01 2 28th',
+                bedroom01_2: '4BHK BEDROOM 01 1 28th',
+                bedroom02_1: '4BHK BEDROOM 02 2 28th',
+                bedroom02_2: '4BHK BEDROOM 02 1 28th',
+                bedroom03_1: '4BHK BEDROOM 03 2 28th',
+                bedroom03_2: '4BHK BEDROOM 03 1 28th',
+                bedroom04_1: '4BHK BEDROOM 04 1 28th',
+                bedroom04_2: '4BHK BEDROOM 04 2 28th'
+            },
+            '33rd': {
+                entrance: '4bhk living 01 33rd',
+                hall: '4bhk living 02 33rd',
+                kitchen: '4bhk kitchen ',
+                bedroom01_1: '4BHK BEDROOM 01 2 33rd',
+                bedroom01_2: '4BHK BEDROOM 01 1 33rd',
+                bedroom02_1: '4BHK BEDROOM 02 2 33rd',
+                bedroom02_2: '4BHK BEDROOM 02 1 33rd',
+                bedroom03_1: '4BHK BEDROOM 03 2 33rd',
+                bedroom03_2: '4BHK BEDROOM 03 1 33rd',
+                bedroom04_1: '4BHK BEDROOM 04 1 33rd',
+                bedroom04_2: '4BHK BEDROOM 04 2 33rd'
+            }
+        };
+        var currentFloor = '17th';
+        var currentRoom = '';
+
+        function loadTour() {
+            if (player)
+                return;
+
+            var beginFunc = function (event) {
+                if (event.name == 'begin') {
+                    var camera = event.data.source.get('camera');
+                    if (camera && camera.get('initialSequence') && camera.get('initialSequence').get('movements').length > 0)
+                        return;
+                }
+
+                if (event.sourceClassName == "MediaAudio")
+                    return;
+
+                isInitialized = true;
+
+                player.unbind('preloadMediaShow', beginFunc, player, true);
+                player.unbindOnObjectsOf('PanoramaPlayListItem', 'begin', beginFunc, player, true);
+                player.unbind('stateChange', beginFunc, player, true);
+                window.parent.postMessage("tourLoaded", '*');
+
+                disposePreloader();
+
+                onVirtualTourLoaded();
+            };
+
+            var settings = new TDV.PlayerSettings();
+
+            settings.set(TDV.PlayerSettings.CONTAINER, document.getElementById('viewer'));
+            settings.set(TDV.PlayerSettings.SCRIPT_URL, 'script.js?v=1755693582282');
+            settings.set(TDV.PlayerSettings.WEBVR_POLYFILL_URL, 'lib/WebVRPolyfill.js?v=1755693582282');
+            settings.set(TDV.PlayerSettings.HLS_URL, 'lib/Hls.js?v=1755693582282');
+            settings.set(TDV.PlayerSettings.QUERY_STRING_PARAMETERS, 'v=1755693582282');
+            window.tdvplayer = player = TDV.PlayerAPI.create(settings);
+            player.bind('preloadMediaShow', beginFunc, player, true);
+            player.bind('stateChange', beginFunc, player, true);
+            player.bindOnObjectsOf('PanoramaPlayListItem', 'begin', beginFunc, player, true);
+            player.bindOnObject('rootPlayer', 'start', function (e) {
+                var queryDict = {}; location.search.substr(1).split("&").forEach(function (item) { var k = item.split("=")[0], v = decodeURIComponent(item.split("=")[1]); queryDict[k] = v });
+                var item = undefined;
+                if ("media-index" in queryDict) {
+                    item = setMediaByIndex(parseInt(queryDict["media-index"]) - 1);
+                }
+                else if ("media-name" in queryDict) {
+                    item = setMediaByName(queryDict["media-name"]);
+                }
+                else {
+                    item = setMediaByIndex(0);
+                }
+                if (item != undefined && "trigger-overlay-name" in queryDict) {
+                    triggerOverlayByName(item, queryDict["trigger-overlay-name"], "trigger-overlay-event" in queryDict ? queryDict["trigger-overlay-event"] : "click");
+                }
+
+                player.getById('rootPlayer').bind('tourEnded', function () {
+                    onVirtualTourEnded();
+                }, player, true);
+            }, player, false);
+
+            /* Listen messages */
+            window.addEventListener('message', function (e) {
+                //Listen to messages for make actions to player in the format function:param1,param2
+                var action = e.data;
+                if (action == 'pauseTour' || action == 'resumeTour') {
+                    this[action].apply(this);
+                }
+            });
+        }
+
+        function pauseTour() {
+            isPaused = true;
+            if (!isInitialized)
+                return;
+
+            var playLists = player.getByClassName('PlayList');
+            for (var i = 0, count = playLists.length; i < count; i++) {
+                var playList = playLists[i];
+                var index = playList.get('selectedIndex');
+                if (index != -1) {
+                    var item = playList.get('items')[index];
+                    var itemPlayer = item.get('player');
+                    if (itemPlayer && itemPlayer.pause) {
+                        playersPlayingTmp.push(itemPlayer);
+                        itemPlayer.pause();
+                    }
+                }
+            }
+
+            player.getById('pauseGlobalAudios')();
+        }
+
+        function resumeTour() {
+            isPaused = false;
+            if (!isInitialized)
+                return;
+
+            while (playersPlayingTmp.length) {
+                var viewer = playersPlayingTmp.pop();
+                viewer.play();
+            }
+
+            player.getById('resumeGlobalAudios')();
+        }
+
+        function onVirtualTourLoaded() {
+            if (isPaused)
+                pauseTour();
+            setTimeout(function () {
+                setupScenePersistence();
+                buildRoomNavBar();
+                highlightActiveFloorButton(currentFloor);
+            }, 1000);
+        }
+
+        function onVirtualTourEnded() {
+
+        }
+
+        function getRootPlayer() {
+            return window.tdvplayer !== undefined ? window.tdvplayer.getById('rootPlayer') : undefined;
+        }
+
+        function setMediaByIndex(index) {
+            var rootPlayer = getRootPlayer();
+            if (rootPlayer !== undefined) {
+                return rootPlayer.setMainMediaByIndex(index);
+            }
+        }
+
+        function setMediaByName(name) {
+            var rootPlayer = getRootPlayer();
+            if (rootPlayer !== undefined) {
+                return rootPlayer.setMainMediaByName(name);
+            }
+        }
+
+        function triggerOverlayByName(item, name, eventName) {
+            var rootPlayer = getRootPlayer();
+            if (rootPlayer !== undefined) {
+                item.bind('begin', function (e) {
+                    item.unbind('begin', arguments.callee, this);
+                    var overlay = rootPlayer.getPanoramaOverlayByName(item.get('media'), name);
+                    if (overlay)
+                        rootPlayer.triggerOverlay(overlay, eventName);
+                }, rootPlayer);
+            }
+        }
+
+        // ---------- 4BHK SCENE PERSISTENCE ----------
+        function getCurrentSceneLabel() {
+            try {
+                var root = getRootPlayer();
+                var media = root && root.get('currentMedia');
+                var label = media && media.get ? media.get('label') : undefined;
+                if (label && label !== 'begin' && label !== 'undefined' && label !== '') return label;
+                var lists = player.getByClassName('PlayList');
+                if (lists && lists.length) {
+                    var idx = lists[0].get('selectedIndex');
+                    if (idx !== -1) {
+                        var item = lists[0].get('items')[idx];
+                        var m = item && item.get('media');
+                        var l2 = m && m.get('label');
+                        if (l2) return l2;
+                    }
+                }
+            } catch (e) { console.warn('getCurrentSceneLabel error', e); }
+            return null;
+        }
+
+        function getRoomKeyFromLabel(label) {
+            if (!label) return null;
+            var lower = String(label).toLowerCase();
+            for (var f in SCENES) {
+                var rooms = SCENES[f];
+                for (var r in rooms) {
+                    if (String(rooms[r]).toLowerCase() === lower) return r;
+                }
+            }
+            if (lower.includes('kitchen')) return 'kitchen';
+            if (lower.includes('living 02')) return 'hall';
+            if (lower.includes('living 01')) return 'entrance';
+            if (lower.includes('bedroom 04')) return 'bedroom04_1';
+            if (lower.includes('bedroom 03')) return 'bedroom03_1';
+            if (lower.includes('bedroom 02')) return 'bedroom02_1';
+            if (lower.includes('bedroom 01')) return 'bedroom01_1';
+            return 'entrance';
+        }
+
+        function getFloorFromLabel(label) {
+            var lower = String(label || '').toLowerCase();
+            if (lower.includes('33rd')) return '33rd';
+            if (lower.includes('28th')) return '28th';
+            if (lower.includes('23rd')) return '23rd';
+            if (lower.includes('17th')) return '17th';
+            return currentFloor;
+        }
+
+        function highlightActiveFloorButton(activeFloor) {
+            var btns = document.querySelectorAll('#floorNav button[data-floor]');
+            btns.forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-floor') === activeFloor); });
+        }
+
+        function setupScenePersistence() {
+            // scene listeners
+            player.bindOnObjectsOf('PanoramaPlayListItem', 'begin', function () { setTimeout(updateTracking, 100); }, player, true);
+            player.bind('stateChange', function (e) { if (e.name === 'mediaChanged') setTimeout(updateTracking, 180); }, player, true);
+            if (!loadSceneState()) updateTracking();
+        }
+
+        function updateTracking() {
+            var label = getCurrentSceneLabel(); if (!label) return;
+            var room = getRoomKeyFromLabel(label); var floor = getFloorFromLabel(label);
+            currentRoom = room; if (floor !== currentFloor) { currentFloor = floor; highlightActiveFloorButton(currentFloor); }
+            saveSceneState(); updateCurrentRoomIndicator();
+        }
+
+        function saveSceneState() { try { localStorage.setItem('sceneState4BHK', JSON.stringify({ floor: currentFloor, room: currentRoom, t: Date.now() })); } catch (e) { } }
+        function loadSceneState() { try { var raw = localStorage.getItem('sceneState4BHK'); if (!raw) return false; var s = JSON.parse(raw); if (!s) return false; currentFloor = s.floor || currentFloor; currentRoom = s.room || currentRoom; return true; } catch (e) { return false; } }
+
+        function switchFloor(targetFloor) {
+            if (!isInitialized || !player) return;
+            if (targetFloor === currentFloor) return;
+            var label = getCurrentSceneLabel();
+            if (label) { currentRoom = getRoomKeyFromLabel(label) || currentRoom || 'entrance'; currentFloor = getFloorFromLabel(label) || currentFloor; }
+            var targetMap = SCENES[targetFloor]; if (!targetMap) return;
+            var targetScene = targetMap[currentRoom] || targetMap.entrance; setMediaByName(targetScene);
+            setTimeout(updateTracking, 400);
+        }
+
+        function buildRoomNavBar() {
+            var container = document.getElementById('roomNav'); if (!container) return; container.innerHTML = '';
+            var entries = [
+                { key: 'entrance', label: 'Entrance', icon: 'fa-person-booth' },
+                { key: 'hall', label: 'Living Room', icon: 'fa-couch' },
+                { key: 'kitchen', label: 'Kitchen', icon: 'fa-kitchen-set' },
+                { key: 'bedroom01_1', label: 'Bedroom 1', icon: 'fa-bed' },
+                { key: 'bedroom02_1', label: 'Bedroom 2', icon: 'fa-bed' },
+                { key: 'bedroom03_1', label: 'Bedroom 3', icon: 'fa-bed' },
+                { key: 'bedroom04_1', label: 'Bedroom 4', icon: 'fa-bed' }
+            ];
+            var floorMap = SCENES[currentFloor] || {};
+            entries.forEach(function (item) {
+                if (!floorMap[item.key]) return;
+                var btn = document.createElement('button');
+                btn.setAttribute('data-room', item.key);
+                btn.innerHTML = '<i class="fa-solid ' + item.icon + '"></i> ' + item.label;
+                btn.onclick = function () { var scene = (SCENES[currentFloor] || {})[item.key]; if (scene) setMediaByName(scene); };
+                container.appendChild(btn);
+            });
+        }
+
+        function updateCurrentRoomIndicator() { var el = document.getElementById('currentRoomInfo'); if (!el) return; el.textContent = currentFloor + ' Floor - ' + (currentRoom || ''); el.classList.add('show'); setTimeout(function () { el.classList.remove('show'); }, 2500); }
+
+        // Top-right actions
+        var audioMuted = false;
+        function goHome() {
+            window.location.href = '../../index.html';
+        }
+        function toggleFullscreen() { var el = document.documentElement; if (!document.fullscreenElement) { if (el.requestFullscreen) el.requestFullscreen(); } else { if (document.exitFullscreen) document.exitFullscreen(); } }
+        function toggleAudio() { audioMuted = !audioMuted; var btn = document.getElementById('audioBtn'); if (audioMuted) { player.getById('pauseGlobalAudios')(); if (btn) btn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>'; } else { player.getById('resumeGlobalAudios')(); if (btn) btn.innerHTML = '<i class="fa-solid fa-volume-high"></i>'; } }
+
+        function showPreloader() {
+            var preloadContainer = document.getElementById('preloadContainer');
+            if (preloadContainer != undefined)
+                preloadContainer.style.opacity = 1;
+        }
+
+        function disposePreloader() {
+            var preloadContainer = document.getElementById('preloadContainer');
+            if (preloadContainer == undefined)
+                return;
+
+            var transitionEndName = transitionEndEventName();
+            if (transitionEndName) {
+                preloadContainer.addEventListener(transitionEndName, hide, false);
+                preloadContainer.style.opacity = 0;
+                setTimeout(hide, 500); //Force hide. Some cases the transitionend event isn't dispatched with an iFrame.
+            }
+            else {
+                hide();
+            }
+
+            function hide() {
+
+                preloadContainer.style.visibility = 'hidden';
+                preloadContainer.style.display = 'none';
+            }
+
+            function transitionEndEventName() {
+                var el = document.createElement('div');
+                var transitions = {
+                    'transition': 'transitionend',
+                    'OTransition': 'otransitionend',
+                    'MozTransition': 'transitionend',
+                    'WebkitTransition': 'webkitTransitionEnd'
+                };
+
+                var t;
+                for (t in transitions) {
+                    if (el.style[t] !== undefined) {
+                        return transitions[t];
+                    }
+                }
+
+                return undefined;
+            }
+        }
+
+        function onBodyClick() {
+            document.body.removeEventListener("click", onBodyClick);
+            document.body.removeEventListener("touchend", onBodyClick);
+            loadTour();
+        }
+
+        function onLoad() {
+            if (/AppleWebKit/.test(navigator.userAgent) && /Mobile\/\w+/.test(navigator.userAgent)) {
+                var inIFrame = false;
+                try {
+                    inIFrame = (window.self !== window.top);
+                }
+                catch (e) {
+                    inIFrame = true;
+                }
+                if (!inIFrame) {
+                    var onResize = function (async) {
+                        [0, 250, 1000, 2000].forEach(function (delay) {
+                            setTimeout(function () {
+                                var viewer = document.querySelector('#viewer');
+                                var scale = window.innerWidth / document.documentElement.clientWidth;
+                                var width = document.documentElement.clientWidth;
+                                var height = Math.round(window.innerHeight / scale);
+                                viewer.style.width = width + 'px';
+                                viewer.style.height = height + 'px';
+                                viewer.style.left = Math.round((window.innerWidth - width) * 0.5) + 'px';
+                                viewer.style.top = Math.round((window.innerHeight - height) * 0.5) + 'px';
+                                viewer.style.transform = 'scale(' + scale + ', ' + scale + ')';
+                                window.scrollTo(0, 0);
+                            }, delay);
+                        });
+                    };
+                    window.addEventListener('resize', onResize);
+                    onResize();
+                }
+            }
+
+
+            if (isOVRWeb()) {
+                showPreloader();
+                loadTour();
+                return;
+            }
+
+            showPreloader();
+            loadTour()
+        }
+
+        function playVideo(video) {
+            function isSafariDesktopV11orGreater() {
+                return /^((?!chrome|android|crios|ipad|iphone).)*safari/i.test(navigator.userAgent) && parseFloat(/Version\/([0-9]+\.[0-9]+)/i.exec(navigator.userAgent)[1]) >= 11;
+            }
+
+            function detectUserAction() {
+                var onVideoClick = function (e) {
+                    if (video.paused) {
+                        video.play();
+                    }
+                    video.muted = false;
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    video.removeEventListener('click', onVideoClick);
+                    video.removeEventListener('touchend', onVideoClick);
+                };
+                video.addEventListener("click", onVideoClick);
+                video.addEventListener("touchend", onVideoClick);
+            }
+
+            if (isSafariDesktopV11orGreater()) {
+                video.muted = true;
+                video.play();
+            } else {
+                var canPlay = true;
+                var promise = video.play();
+                if (promise) {
+                    promise.catch(function () {
+                        video.muted = true;
+                        video.play();
+                        detectUserAction();
+                    });
+                } else {
+                    canPlay = false;
+                }
+
+                if (!canPlay || video.muted) {
+                    detectUserAction();
+                }
+            }
+        }
+
+        function isOVRWeb() {
+            return window.location.hash.substring(1).split('&').indexOf('ovrweb') > -1;
+        }
+
+        function toggleAudio() {
+            const audio = document.getElementById("background-audio");
+            const audioBtn = document.getElementById("audioBtn");
+
+            if (audio.muted) {
+                audio.muted = false;
+                audio.play();
+                audioBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+            } else {
+                audio.muted = true;
+                audio.pause();
+                audioBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+            }
+        }
+    </script>
+    <style type="text/css">
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        #viewer {
+            background-color: #FFFFFF;
+            z-index: 1;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+        }
+
+        #preloadContainer {
+            z-index: 2;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.5s;
+            -webkit-transition: opacity 0.5s;
+            -moz-transition: opacity 0.5s;
+            -o-transition: opacity 0.5s;
+        }
+
+        /* Floor buttons - vertical left */
+        #floorNav {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        #floorNav button {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            background: #8a1a52;
+            color: #fff;
+            font-weight: 700;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+            transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        #floorNav button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        #floorNav button.active {
+            background: #a11f60;
+        }
+
+        #floorNav button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Bottom room bar */
+        #roomNav {
+            position: absolute;
+            left: 50%;
+            bottom: 16px;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 12px;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        }
+
+        #roomNav button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            background: #8a1a52;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s ease;
+        }
+
+        #roomNav button:hover {
+            background: #a11f60;
+        }
+
+        /* Top-right actions */
+        #topActions {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        #topActions button {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: #8a1a52;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+            transition: transform 0.15s ease, background 0.2s ease;
+        }
+
+        #topActions button:hover {
+            transform: translateY(-1px);
+            background: #a11f60;
+        }
+
+        /* Current room indicator */
+        #currentRoomInfo {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        #currentRoomInfo.show {
+            opacity: 1;
+        }
+    </style>
+
+</head>
+
+<body onload="onLoad()">
+    <audio id="background-audio" loop muted>
+        <source src="/assets/audio/audio.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <div id="preloadContainer" style="background-color:rgba(255,255,255,1)">
+        <div style="z-index: 4; position: absolute; left: 0%; top: 50%; width: 100.00%; height: 10.00%">
+            <div style="text-align:left; color:#000; ">
+                <DIV STYLE="text-align:center;"><SPAN
+                        STYLE="letter-spacing:0vmin;color:#777777;font-size:1.47vmin;font-family:Arial, Helvetica, sans-serif;">Loading
+                        virtual tour. Please wait...</SPAN></DIV>
+                <p STYLE="margin:0; line-height:1.35vmin;"><BR
+                        STYLE="letter-spacing:0vmin;color:#888888;font-size:1.35vmin;font-family:'Segoe UI';" /></p>
+            </div>
+        </div>
+    </div>
+    <div id="viewer"></div>
+
+    <!-- Top-right actions -->
+    <div id="topActions">
+        <button title="Home" onclick="goHome()"><i class="fa-solid fa-house"></i></button>
+        <button title="Fullscreen" onclick="toggleFullscreen()"><i class="fa-solid fa-expand"></i></button>
+        <button class="utility-btn" id="audioBtn" onclick="toggleAudio()">
+            <i class="fa-solid fa-volume-xmark"></i>
+        </button>
+    </div>
+
+    <!-- Floor buttons (vertical) -->
+    <div id="floorNav">
+        <button data-floor="17th" onclick="switchFloor('17th')">17F</button>
+        <button data-floor="23rd" onclick="switchFloor('23rd')">23F</button>
+        <button data-floor="28th" onclick="switchFloor('28th')">28F</button>
+        <button data-floor="33rd" onclick="switchFloor('33rd')">33F</button>
+    </div>
+
+    <!-- Bottom room bar -->
+    <div id="roomNav"></div>
+
+    <!-- Current room indicator -->
+    <div id="currentRoomInfo"></div>
+</body>
+
+</html>

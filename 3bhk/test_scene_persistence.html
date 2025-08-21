@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scene Persistence Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .test-button { padding: 10px 15px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        .test-button:hover { background: #0056b3; }
+        .info { background: #f8f9fa; padding: 10px; border-radius: 3px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Scene Persistence Test</h1>
+    
+    <div class="test-section">
+        <h3>Test Scene Navigation</h3>
+        <p>This demonstrates how the scene persistence system works:</p>
+        <ul>
+            <li>Navigate to different rooms on the 17th floor</li>
+            <li>Switch to different floors using the floor navigation buttons</li>
+            <li>The system should maintain the same room type when switching floors</li>
+        </ul>
+        
+        <div class="info">
+            <strong>Example:</strong> If you're in "bedroom01" on the 17th floor and switch to the 28th floor, 
+            you should automatically go to "bedroom01" on the 28th floor.
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test URL Parameters</h3>
+        <p>You can test direct navigation using URL parameters:</p>
+        <ul>
+            <li><a href="index.htm?floor=17th&room=bedroom01" target="_blank">17th Floor - Bedroom 01</a></li>
+            <li><a href="index.htm?floor=23rd&room=kitchen" target="_blank">23rd Floor - Kitchen</a></li>
+            <li><a href="index.htm?floor=28th&room=bedroom02" target="_blank">28th Floor - Bedroom 02</a></li>
+            <li><a href="index.htm?floor=33rd&room=entrance" target="_blank">33rd Floor - Entrance</a></li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h3>Keyboard Shortcuts</h3>
+        <p>Use these keyboard shortcuts for quick floor navigation:</p>
+        <ul>
+            <li><strong>Ctrl+1:</strong> Switch to 17th Floor</li>
+            <li><strong>Ctrl+2:</strong> Switch to 23rd Floor</li>
+            <li><strong>Ctrl+3:</strong> Switch to 28th Floor</li>
+            <li><strong>Ctrl+4:</strong> Switch to 33rd Floor</li>
+            <li><strong>Ctrl+D:</strong> Debug scene persistence</li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h3>Features Implemented</h3>
+        <ul>
+            <li>✅ Scene persistence across floor switches</li>
+            <li>✅ Automatic room type detection</li>
+            <li>✅ Floor navigation buttons</li>
+            <li>✅ Current room indicator</li>
+            <li>✅ Local storage for scene state</li>
+            <li>✅ URL parameter support for direct navigation</li>
+            <li>✅ Keyboard shortcuts</li>
+            <li>✅ Debug functionality</li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h3>How It Works</h3>
+        <ol>
+            <li>The system tracks your current floor and room type</li>
+            <li>When you switch floors, it finds the corresponding room on the new floor</li>
+            <li>If the exact room doesn't exist, it defaults to the entrance</li>
+            <li>Your scene state is saved to localStorage for persistence across page reloads</li>
+            <li>The floor navigation buttons highlight the current floor</li>
+        </ol>
+    </div>
+    
+    <div class="test-section">
+        <h3>Open Virtual Tour</h3>
+        <a href="index.htm" target="_blank" class="test-button">Open Virtual Tour</a>
+    </div>
+</body>
+</html>
