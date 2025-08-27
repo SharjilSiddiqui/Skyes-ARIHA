@@ -28,7 +28,7 @@
 
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-image: var(--day-bg);
+            background-image: var(--night-bg);
             background-size: cover;
             background-position: center;
             height: 100vh;
@@ -46,13 +46,12 @@
             width: 120px;
         }
 
-        .logo-center {
+        .logo-below {
             position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 150px;
+            left: 20px;
             z-index: 10;
-            width: 150px;
+            width: 130px;
         }
 
         /* Right-side flat buttons (3BHK / 4BHK) */
@@ -99,11 +98,8 @@
         /* Floating circular utility buttons (bottom-right) */
         .utility-buttons {
             position: fixed;
-            /* instead of absolute */
             bottom: 1px;
-            /* distance from bottom */
             right: 10px;
-            /* distance from right */
             display: flex;
             gap: 10px;
             z-index: 9999;
@@ -123,6 +119,8 @@
             cursor: pointer;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease-in-out;
+            position: relative;
+            bottom: 12px;
         }
 
         .utility-btn:hover {
@@ -131,12 +129,11 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
         }
 
-        /* Left-center VR button */
-        .vr-btn {
+        /* Left-center VR & Amenities buttons */
+        .vr-btn,
+        .amenities-btn {
             position: absolute;
-            top: 50%;
             left: 20px;
-            transform: translateY(-50%);
             width: 65px;
             height: 65px;
             border-radius: 50%;
@@ -153,7 +150,18 @@
             z-index: 4;
         }
 
-        .vr-btn:hover {
+        .vr-btn {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .amenities-btn {
+            top: calc(50% + 80px);
+            transform: translateY(-50%);
+        }
+
+        .vr-btn:hover,
+        .amenities-btn:hover {
             background: #c00064;
             transform: translateY(-50%) scale(1.1);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
@@ -207,11 +215,12 @@
         /* Mobile styles */
         @media (max-width: 768px) {
             .logo-left {
-                width: 90px;
+                width: 80px;
             }
 
-            .logo-center {
-                width: 120px;
+            .logo-below {
+                width: 80px;
+                top: 110px;
             }
 
             .button-group {
@@ -238,7 +247,8 @@
                 font-size: 1.2rem;
             }
 
-            .vr-btn {
+            .vr-btn,
+            .amenities-btn {
                 width: 55px;
                 height: 55px;
                 font-size: 1.4rem;
@@ -261,11 +271,16 @@
 
     <!-- Logos -->
     <img src="./assets/ARIHA logo.png" alt="Ariha Logo" class="logo-left">
-    <img src="./assets/Skyes_ARIHA.png" alt="Skyes Logo" class="logo-center">
+    <img src="./assets/Skyes_ARIHA.png" alt="Skyes Logo" class="logo-below">
 
     <!-- Left-center VR button -->
     <button class="vr-btn" onclick="location.href='./project/project.html'">
         <i class="fa-solid fa-vr-cardboard"></i>
+    </button>
+
+    <!-- Left-center Amenities button -->
+    <button class="amenities-btn" onclick="location.href='./lobby/lobby.html'">
+        <i class="fa-solid fa-concierge-bell"></i>
     </button>
 
     <!-- Right side buttons -->
@@ -293,8 +308,8 @@
 
     <!-- Top-Right Theme Toggle -->
     <div class="day-night-toggle">
-        <label id="themeLabel" for="toggleTheme">DAY</label>
-        <input type="checkbox" id="toggleTheme" />
+        <label id="themeLabel" for="toggleTheme">NIGHT</label>
+        <input type="checkbox" id="toggleTheme" checked />
     </div>
 
     <script>
@@ -318,6 +333,11 @@
         window.onload = function () {
             const toggle = document.getElementById("toggleTheme");
             const themeLabel = document.getElementById("themeLabel");
+
+            // set default to night
+            document.body.style.backgroundImage = "var(--night-bg)";
+            toggle.checked = true;
+            themeLabel.textContent = "NIGHT";
 
             toggle.addEventListener("change", () => {
                 if (toggle.checked) {
