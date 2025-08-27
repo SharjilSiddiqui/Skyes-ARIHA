@@ -342,6 +342,30 @@
         function isOVRWeb(){
             return window.location.hash.substring(1).split('&').indexOf('ovrweb') > -1;
         }
+
+        function toggleAudio() {
+            const audio = document.getElementById("background-audio");
+            const audioBtn = document.getElementById("audioBtn");
+
+            if (audio.muted) {
+                audio.muted = false;
+                audio.play();
+                audioBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+            } else {
+                audio.muted = true;
+                audio.pause();
+                audioBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+            }
+        }
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
     </script>
 
     <style type="text/css">
@@ -351,6 +375,13 @@
         #preloadContainer { z-index:2; position:relative; width:100%; height:100%; transition: opacity 0.5s; -webkit-transition: opacity 0.5s; -moz-transition: opacity 0.5s; -o-transition: opacity 0.5s;}
 
         /* --- Amenities navigation bar (matches your screenshot style) --- */
+
+        :root {
+            --day-bg: url('./assets/renders/day.jpg');
+            --night-bg: url('./assets/renders/night.jpg');
+            --button-color: #800040;
+        }
+
         .amenities-nav {
             position: absolute;
             left: 50%;
@@ -400,6 +431,39 @@
             transform: translateY(-3px);
         }
 
+        .utility-buttons {
+            position: fixed;
+            top: 20px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+            z-index: 9999;
+        }
+
+        .utility-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: none;
+            background: var(--button-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            bottom: 12px;
+        }
+
+        .utility-btn:hover {
+            background: #c00064;
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
         /* responsive tweaks */
         @media (max-width: 520px) {
             .amenity-btn {
@@ -428,8 +492,25 @@
             </div>
         </div>
     </div>
-
     <div id="viewer"></div>
+
+    <audio id="background-audio" loop muted>
+        <source src="./assets/audio/audio.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="utility-buttons">
+        <button class="utility-btn" onclick="location.href='/index.html'">
+            <i class="fa-solid fa-house"></i>
+        </button>
+        <button class="utility-btn" onclick="toggleFullscreen()">
+            <i class="fa-solid fa-expand"></i>
+        </button>
+        <button class="utility-btn" id="audioBtn" onclick="toggleAudio()">
+            <i class="fa-solid fa-volume-xmark"></i>
+        </button>
+    </div>
+
 
     <!-- Amenities Buttons (pills with icons) -->
     <div class="amenities-nav" role="navigation" aria-label="Amenities">
