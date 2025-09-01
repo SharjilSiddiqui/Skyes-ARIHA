@@ -8,9 +8,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
     <link rel="manifest" href="/assets/site.webmanifest">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=0.5, width=device-width, viewport-fit=cover" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, width=device-width, viewport-fit=cover, maximum-scale=1.0" />
 
-    <!-- 3DVista preloads (keep from export) -->
     <link rel="preload" href="script.js?v=1755676325278" as="script" />
     <link rel="preload" href="media/panorama_C8E22910_C38F_897E_41BD_C3761AC35EAF_0/l/2/0_0.jpg?v=1755676325278"
         as="image" />
@@ -172,6 +171,47 @@
         #currentRoomInfo.show {
             opacity: 1;
         }
+
+        /* Rotate Overlay */
+        #rotateOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 1.5rem;
+            z-index: 999999;
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        #rotateOverlay i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            animation: rotatePhone 2s infinite ease-in-out;
+        }
+
+        @keyframes rotatePhone {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(90deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
+        }
     </style>
 
     <script type="text/javascript">
@@ -180,21 +220,22 @@
     var isInitialized = false;
     var isPaused = false;
 
+    // The scenes object remains the same as provided.
     var SCENES = {
         '17th': {
             entrance: '3bhk 02 entrance 17th floor',
             hall: '3bhk 01 hall 17th floor',
             passage: '3bhk Passage 17th floor',
             kitchen: '3bhk kitchen',
-            bedroom01_1: '3bhk bedroom01 17th',
-            bedroom01_2: '3bhk bedroom02 17th',
+            bedroom01_1: '3bhk bedroom02 17th',
+            bedroom01_2: '3bhk bedroom01 17th',
             bedroom02_1: '3bhk bedroom02 1 17th',
             bedroom02_2: '3bhk bedroom02 2 17th',
             bedroom03_1: '3bhk bedroom03 01 17th',
             bedroom03_2: '3bhk bedroom03 02 17th',
-            balcony: '3BHK Bolcony_17',
-            bedroom1_toilet: '3bhk_bedroom_01_toilet copy',
-            bedroom2_toilet: '3bhk_bed02_toilet copy',
+            balcony: '3BHK_Bolcony_17',
+            bedroom1_toilet: '3bhk_bedroom01_toilet copy',
+            bedroom2_toilet: '3bhk_bed2_toilet copy',
             bedroom3_toilet: '3bhk_BDRoom03_toilet copy',
         },
         '23rd': {
@@ -202,15 +243,15 @@
             hall: '3bhk 01 hall 23rd floor',
             passage: '3bhk Passage 23rd floor',
             kitchen: '3bhk kitchen',
-            bedroom01_1: '3bhk bedroom01 23rd',
-            bedroom01_2: '3bhk bedroom02 23rd',
-            bedroom02_1: '3bhk bedroom02 1 23rd',
-            bedroom02_2: '3bhk bedroom02 2 23rd',
+            bedroom01_1: '3bhk bedroom02 23rd',
+            bedroom01_2: '3bhk bedroom01 23rd',
+            bedroom02_1: '3bhk bedroom02 2 23rd',
+            bedroom02_2: '3bhk bedroom02 1 23rd',
             bedroom03_1: '3bhk bedroom03 01 23rd',
             bedroom03_2: '3bhk bedroom03 02 23rd',
-            balcony: '3BHK Bolcony_23',
-            bedroom1_toilet: '3bhk_bedroom_01_toilet copy',
-            bedroom2_toilet: '3bhk_bed02_toilet copy',
+            balcony: '3BHK_Bolcony_23',
+            bedroom1_toilet: '3bhk_bedroom01_toilet copy',
+            bedroom2_toilet: '3bhk_bed2_toilet copy',
             bedroom3_toilet: '3bhk_BDRoom03_toilet copy',
         },
         '28th': {
@@ -218,15 +259,15 @@
             hall: '3bhk 01 hall 28th floor',
             passage: '3bhk Passage 28th floor',
             kitchen: '3bhk kitchen',
-            bedroom01_1: '3bhk bedroom01 28th',
-            bedroom01_2: '3bhk bedroom02 28th',
-            bedroom02_1: '3bhk bedroom02 1 28th',
-            bedroom02_2: '3bhk bedroom02 2 28th',
+            bedroom01_1: '3bhk bedroom02 28th',
+            bedroom01_2: '3bhk bedroom01 28th',
+            bedroom02_1: '3bhk bedroom02 2 28th',
+            bedroom02_2: '3bhk bedroom02 1 28th',
             bedroom03_1: '3bhk bedroom03 01 28th',
             bedroom03_2: '3bhk bedroom03 02 28th',
-            balcony: '3BHK Bolcony_28',
-            bedroom1_toilet: '3bhk_bedroom_01_toilet copy',
-            bedroom2_toilet: '3bhk_bed02_toilet copy',
+            balcony: '3BHK_Bolcony _28',
+            bedroom1_toilet: '3bhk_bedroom01_toilet copy',
+            bedroom2_toilet: '3bhk_bed2_toilet copy',
             bedroom3_toilet: '3bhk_BDRoom03_toilet copy',
         },
         '33rd': {
@@ -234,118 +275,70 @@
             hall: '3bhk 01 hall 33 rd floor',
             passage: '3bhk Passage 33rd floor',
             kitchen: '3bhk kitchen',
-            bedroom01_1: '3bhk bedroom01 33rd',
-            bedroom01_2: '3bhk bedroom02 33rd',
-            bedroom02_1: '3bhk bedroom02 1 33rd',
-            bedroom02_2: '3bhk bedroom02 2 33rd',
+            bedroom01_1: '3bhk bedroom02 33rd',
+            bedroom01_2: '3bhk bedroom01 33rd',
+            bedroom02_1: '3bhk bedroom02 2 33rd',
+            bedroom02_2: '3bhk bedroom02 1 33rd',
             bedroom03_1: '3bhk bedroom03 01 106th',
             bedroom03_2: '3bhk bedroom03 02 106th',
-            balcony: '3BHK Bolcony_33',
-            bedroom1_toilet: '3bhk_bedroom_01_toilet copy',
-            bedroom2_toilet: '3bhk_bed02_toilet copy',
+            balcony: '3BHK_Bolcony_33',
+            bedroom1_toilet: '3bhk_bedroom01_toilet copy',
+            bedroom2_toilet: '3bhk_bed2_toilet copy',
             bedroom3_toilet: '3bhk_BDRoom03_toilet copy',
         }
     };
 
     var currentFloor = "17th";
     var currentRoom = "";
-    
+
 
     // Removed legacy viewer scenechange handler; use TDV player events instead
 
-    // Scene persistence function - Enhanced implementation
+    // **FIXED:** The logic now refreshes the state before processing the switch.
     function switchFloor(targetFloor) {
         if (!isInitialized || !player) {
             console.warn('Player not ready for floor switch');
             return;
         }
 
+        // 1. Get the current, actual scene name to ensure state is fresh.
+        var currentSceneLabel = getCurrentSceneName();
+        if (!currentSceneLabel) {
+            console.error('Could not get current scene name. Aborting floor switch.');
+            return;
+        }
+
+        // 2. Use the real scene name to get the correct current room and floor.
+        currentRoom = getRoomFromSceneName(currentSceneLabel);
+        currentFloor = getFloorFromSceneName(currentSceneLabel);
+        highlightActiveFloorButton(currentFloor);
+
+        // Check if the requested floor is the same as the current floor after the refresh.
         if (targetFloor === currentFloor) {
             console.log('Already on floor', targetFloor);
             return;
         }
 
-        // Resolve current room from the actual current media label just-in-time
-        var currentSceneLabel = getCurrentSceneName();
-        if (currentSceneLabel) {
-            // Prefer exact label-to-room resolution
-            var resolvedRoom = getRoomKeyFromSceneLabel(currentSceneLabel);
-            var resolvedFloor = getFloorFromSceneLabel(currentSceneLabel);
-            if (resolvedRoom) currentRoom = resolvedRoom;
-            if (resolvedFloor) currentFloor = resolvedFloor;
+        console.log('Initiating floor switch from', currentFloor, 'to', targetFloor, 'keeping room', currentRoom);
+
+        var targetScenes = SCENES[targetFloor];
+        var targetSceneName = null;
+
+        // Try to find the target scene for the current room key.
+        if (currentRoom && targetScenes && targetScenes[currentRoom]) {
+            targetSceneName = targetScenes[currentRoom];
+            console.log('Found scene persistence match for room:', currentRoom, '->', targetSceneName);
+        } else {
+            // Fallback to entrance if the room doesn't exist on the target floor.
+            console.warn('Room', currentRoom, 'not found on floor', targetFloor, '. Defaulting to entrance.');
+            targetSceneName = SCENES[targetFloor]['entrance'];
+            currentRoom = 'entrance';
         }
 
-        console.log('Switching from floor', currentFloor, 'to', targetFloor, 'keeping room', currentRoom);
-
-        // Get the target scene name for the same room on the new floor
-        var targetScenes = SCENES[targetFloor];
-        if (!targetScenes) {
-            console.error('No scenes defined for floor:', targetFloor);
+        if (!targetSceneName) {
+            console.error('Failed to find a valid target scene. Aborting floor switch.');
             return;
         }
-
-        // Find the target scene name for the current room type
-        var targetSceneName = null;
-        
-        // First try to find the exact room match
-        if (currentRoom && targetScenes[currentRoom]) {
-            targetSceneName = targetScenes[currentRoom];
-            console.log('Found exact room match:', currentRoom, '->', targetSceneName);
-        } else {
-            // If no exact match, try to find by room type pattern based on current media label
-            var currentSceneName = getCurrentSceneName();
-            console.log('No exact room match, current media label:', currentSceneName);
-            
-            if (currentSceneName) {
-                var roomType = getRoomFromSceneName(currentSceneName);
-                console.log('Detected room type from scene name:', roomType);
-                
-                if (targetScenes[roomType]) {
-                    targetSceneName = targetScenes[roomType];
-                    currentRoom = roomType;
-                    console.log('Found room type match:', roomType, '->', targetSceneName);
-                } else {
-                    console.log('Room type not found on target floor:', roomType);
-                }
-            }
-            
-            // If still no match, try to detect from the current scene name more intelligently
-            if (!targetSceneName && currentSceneName) {
-                console.log('Trying intelligent room detection...');
-                
-                // Try to match room types more flexibly
-                var detectedRoom = null;
-                var sceneLower = currentSceneName.toLowerCase();
-                
-                // Check for specific room patterns
-                if (sceneLower.includes('bedroom01')) detectedRoom = 'bedroom01';
-                else if (sceneLower.includes('bedroom02') && sceneLower.includes(' 1')) detectedRoom = 'bedroom02_1';
-                else if (sceneLower.includes('bedroom02') && sceneLower.includes(' 2')) detectedRoom = 'bedroom02_2';
-                else if (sceneLower.includes('bedroom02')) detectedRoom = 'bedroom02';
-                else if (sceneLower.includes('bedroom03') && sceneLower.includes(' 1')) detectedRoom = 'bedroom03_1';
-                else if (sceneLower.includes('bedroom03') && sceneLower.includes(' 2')) detectedRoom = 'bedroom03_2';
-                else if (sceneLower.includes('bedroom03')) detectedRoom = 'bedroom03';
-                else if (sceneLower.includes('kitchen')) detectedRoom = 'kitchen';
-                else if (sceneLower.includes('passage')) detectedRoom = 'passage';
-                else if (sceneLower.includes('hall')) detectedRoom = 'hall';
-                else if (sceneLower.includes('entrance')) detectedRoom = 'entrance';
-                
-                if (detectedRoom && targetScenes[detectedRoom]) {
-                    targetSceneName = targetScenes[detectedRoom];
-                    currentRoom = detectedRoom;
-                    console.log('Intelligent detection found:', detectedRoom, '->', targetSceneName);
-                }
-            }
-            
-            // If still no match, default to entrance
-            if (!targetSceneName) {
-                console.warn('Room', currentRoom, 'not found on floor', targetFloor, 'defaulting to entrance');
-                targetSceneName = targetScenes.entrance;
-                currentRoom = 'entrance';
-            }
-        }
-
-        console.log('Switching to scene:', targetSceneName);
 
         // Disable buttons during transition
         var buttons = document.querySelectorAll('#floorNav button');
@@ -354,40 +347,18 @@
         // Switch to the target scene
         var result = setMediaByName(targetSceneName);
         if (result) {
-            currentFloor = targetFloor;
-            highlightActiveFloorButton(currentFloor);
-            console.log('Successfully switched to floor', targetFloor, 'room', currentRoom);
+            console.log('Successfully requested scene switch to:', targetSceneName);
+            // The event listener will update currentFloor again when the scene loads.
             
-            // Force update tracking after a delay to ensure scene is loaded
+            // Re-enable buttons after a short delay
             setTimeout(function() {
-                var actualLabel = getCurrentSceneName();
-                if (actualLabel && actualLabel !== 'begin' && actualLabel !== '') {
-                    console.log('Verifying scene switch - actual media label:', actualLabel);
-                    
-                    var actualRoom = getRoomKeyFromSceneLabel(actualLabel) || getRoomFromSceneName(actualLabel);
-                    var actualFloor = getFloorFromSceneLabel(actualLabel);
-                    
-                    // Update with actual detected values
-                    currentRoom = actualRoom;
-                    currentFloor = actualFloor;
-                    
-                    console.log('Updated tracking with actual values - Floor:', currentFloor, 'Room:', currentRoom);
-                    
-                    // Save the new state
-                    saveSceneState();
-                    
-                    // Update room indicator
-                    updateCurrentRoomIndicator();
-                }
+                buttons.forEach(function(btn) { btn.disabled = false; });
             }, 500);
         } else {
-            console.error('Failed to switch to scene:', targetSceneName);
-        }
-
-        // Re-enable buttons after a short delay
-        setTimeout(function() {
+            console.error('setMediaByName failed for:', targetSceneName);
+            // Re-enable buttons if the switch failed
             buttons.forEach(function(btn) { btn.disabled = false; });
-        }, 500);
+        }
     }
 
     // Debug function to test scene persistence
@@ -630,13 +601,13 @@
         }, 3000);
     }
 
-    // Build bottom room bar from SCENES keys
+    // **MODIFIED:** Removed buttons for balcony and toilets
     function buildRoomNavBar() {
         var container = document.getElementById('roomNav');
         if (!container) return;
         container.innerHTML = '';
 
-        // Define display order and labels similar to screenshot
+        // Define display order and labels
         var entries = [
             { key: 'entrance', label: 'Entrance', icon: 'fa-person-booth' },
             { key: 'hall', label: 'Living Room', icon: 'fa-couch' },
@@ -644,7 +615,7 @@
             { key: 'kitchen', label: 'Kitchen', icon: 'fa-kitchen-set' },
             { key: 'bedroom01', label: 'Bedroom 1', icon: 'fa-bed' },
             { key: 'bedroom02', label: 'Bedroom 2', icon: 'fa-bed' },
-            { key: 'bedroom03', label: 'Bedroom 3', icon: 'fa-bed' }
+            { key: 'bedroom03', label: 'Bedroom 3', icon: 'fa-bed' },
         ];
 
         // Adapt to renamed keys like bedroom01_1/bedroom01_2
@@ -655,7 +626,7 @@
                 if (floorMap['bedroom01_1']) return 'bedroom01_1';
             }
             if (baseKey === 'bedroom02') {
-                if (floorMap['bedroom01_2']) return 'bedroom01_2';
+                if (floorMap['bedroom02_1']) return 'bedroom02_1';
             }
             if (baseKey === 'bedroom03') {
                 if (floorMap['bedroom03_1']) return 'bedroom03_1';
@@ -687,7 +658,7 @@
 
     // Top-right actions
     function goHome() {
-            window.location.href = '../../index.html';
+        window.location.href = '../../index.html';
     }
 
     function toggleFullscreen() {
@@ -716,19 +687,37 @@
         if (!sceneName) return 'entrance';
         
         console.log('Analyzing scene name:', sceneName);
-        var s = sceneName.toLowerCase();
-        
-        // More specific matching with word boundaries
-        if (s.includes('bedroom02') && s.includes(' 1')) return 'bedroom02_1';
-        if (s.includes('bedroom02') && s.includes(' 2')) return 'bedroom02_2';
-        if (s.includes('bedroom03') && s.includes(' 1')) return 'bedroom03_1';
-        if (s.includes('bedroom03') && s.includes(' 2')) return 'bedroom03_2';
-        if (s.includes('bedroom02'))  return 'bedroom02';
-        if (s.includes('bedroom01'))  return 'bedroom01';
-        if (s.includes('kitchen'))    return 'kitchen';
-        if (s.includes('passage'))    return 'passage';
-        if (s.includes('hall'))       return 'hall';
-        if (s.includes('entrance'))   return 'entrance';
+        var s = String(sceneName).toLowerCase();
+
+        // 🎯 NEW: Perform an exact lookup of the scene name in the SCENES object.
+        for (const floorKey in SCENES) {
+            if (SCENES.hasOwnProperty(floorKey)) {
+                for (const roomKey in SCENES[floorKey]) {
+                    const sceneLabel = SCENES[floorKey][roomKey];
+                    if (sceneLabel && String(sceneLabel).toLowerCase() === s) {
+                        console.log('Exact scene label match found:', roomKey);
+                        return roomKey;
+                    }
+                }
+            }
+        }
+        // 🚀 FALLBACK: If no exact match, use the keyword-based heuristic.
+        console.log('No exact scene label match found. Falling back to keyword search.');
+
+        if (s.includes('bolcony')) return 'balcony';
+        if (s.includes('bedroom_01_toilet')) return 'bedroom1_toilet';
+        if (s.includes('bed02_toilet')) return 'bedroom2_toilet';
+        if (s.includes('bdroom03_toilet')) return 'bedroom3_toilet';
+        if (s.includes('bedroom02 1')) return 'bedroom02_1'; // More specific check
+        if (s.includes('bedroom02 2')) return 'bedroom02_2'; // More specific check
+        if (s.includes('bedroom03 1')) return 'bedroom03_1'; // More specific check
+        if (s.includes('bedroom03 2')) return 'bedroom03_2'; // More specific check
+        if (s.includes('bedroom02')) return 'bedroom02';
+        if (s.includes('bedroom01')) return 'bedroom01';
+        if (s.includes('kitchen')) return 'kitchen';
+        if (s.includes('passage')) return 'passage';
+        if (s.includes('hall')) return 'hall';
+        if (s.includes('entrance')) return 'entrance';
         
         console.log('No room match found for:', sceneName, '- defaulting to entrance');
         return 'entrance';
@@ -1305,19 +1294,33 @@
     }
 
     function toggleAudio() {
-            const audio = document.getElementById("background-audio");
-            const audioBtn = document.getElementById("audioBtn");
+        const audio = document.getElementById("background-audio");
+        const audioBtn = document.getElementById("audioBtn");
 
-            if (audio.muted) {
-                audio.muted = false;
-                audio.play();
-                audioBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+        if (audio.muted) {
+            audio.muted = false;
+            audio.play();
+            audioBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+        } else {
+            audio.muted = true;
+            audio.pause();
+            audioBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+        }
+    }
+
+    // Orientation check
+        function checkOrientation() {
+            const overlay = document.getElementById("rotateOverlay");
+            if (window.innerHeight > window.innerWidth && /Mobi|Android/i.test(navigator.userAgent)) {
+                overlay.style.display = "flex";
             } else {
-                audio.muted = true;
-                audio.pause();
-                audioBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+                overlay.style.display = "none";
             }
         }
+
+        window.addEventListener("resize", checkOrientation);
+        window.addEventListener("orientationchange", checkOrientation);
+        window.addEventListener("load", checkOrientation);
 </script>
 
 </head>
@@ -1327,6 +1330,11 @@
         <source src="/assets/audio/audio.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
+    <!-- Orientation overlay -->
+    <div id="rotateOverlay">
+        <i class="fa-solid fa-mobile-screen-button"></i>
+        <p>Please rotate your device<br>for the best experience</p>
+    </div>
     <div id="preloadContainer" style="background-color:rgba(255,255,255,1)">
         <div style="z-index: 4; position: absolute; left: 0%; top: 50%; width: 100.00%; height: 10.00%">
             <div style="text-align:left; color:#000;">
@@ -1346,7 +1354,6 @@
 
     <div id="viewer"></div>
 
-    <!-- Top-right actions -->
     <div id="topActions">
         <button onclick="goHome()" title="Home">
             <i class="fa-solid fa-home"></i>
@@ -1357,7 +1364,6 @@
         </button>
     </div>
 
-    <!-- Floor buttons (vertical) -->
     <div id="floorNav">
         <button data-floor="17th" onclick="switchFloor('17th')">17F</button>
         <button data-floor="23rd" onclick="switchFloor('23rd')">23F</button>
@@ -1365,10 +1371,8 @@
         <button data-floor="33rd" onclick="switchFloor('33rd')">33F</button>
     </div>
 
-    <!-- Bottom room bar -->
     <div id="roomNav"></div>
 
-    <!-- Current room indicator -->
     <div id="currentRoomInfo"></div>
 </body>
 

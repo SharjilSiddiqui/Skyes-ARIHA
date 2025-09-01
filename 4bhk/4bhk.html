@@ -8,7 +8,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
     <link rel="manifest" href="/assets/site.webmanifest">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=0.5, width=device-width, viewport-fit=cover" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, width=device-width, viewport-fit=cover, maximum-scale=1.0" />
     <link rel="preload" href="script.js?v=1755693582282" as="script" />
     <link rel="preload" href="media/panorama_CC48A826_C71D_4951_41E7_7F28A52014B9_0/l/2/0_0.jpg?v=1755693582282"
         as="image" />
@@ -21,9 +21,9 @@
     <link rel="preload" href="media/panorama_CC48A826_C71D_4951_41E7_7F28A52014B9_0/f/2/0_0.jpg?v=1755693582282"
         as="image" />
     <link rel="preload" href="media/panorama_CC48A826_C71D_4951_41E7_7F28A52014B9_0/b/2/0_0.jpg?v=1755693582282"
-    as="image" />
+        as="image" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.0/css/all.css">
-    
+
     <script>(function (i, s, o, g, r, a, m) { i["GoogleAnalyticsObject"] = r; i[r] = i[r] || function () { (i[r].q = i[r].q || []).push(arguments) }, i[r].l = 1 * new Date(); a = s.createElement(o), m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m) })(window, document, "script", "//www.google-analytics.com/analytics.js", "ga"); ga("create", "UA-116087-3", "auto"); ga("send", "pageview");</script>
     <meta name="description" content="Virtual Tour" />
     <meta name="theme-color" content="#FFFFFF" />
@@ -149,15 +149,17 @@
             player.bind('stateChange', beginFunc, player, true);
             player.bindOnObjectsOf('PanoramaPlayListItem', 'begin', beginFunc, player, true);
             player.bindOnObject('rootPlayer', 'start', function (e) {
-                var queryDict = {}; location.search.substr(1).split("&").forEach(function (item) { var k = item.split("=")[0], v = decodeURIComponent(item.split("=")[1]); queryDict[k] = v });
+                var queryDict = {};
+                location.search.substr(1).split("&").forEach(function (item) {
+                    var k = item.split("=")[0], v = decodeURIComponent(item.split("=")[1]);
+                    queryDict[k] = v
+                });
                 var item = undefined;
                 if ("media-index" in queryDict) {
                     item = setMediaByIndex(parseInt(queryDict["media-index"]) - 1);
-                }
-                else if ("media-name" in queryDict) {
+                } else if ("media-name" in queryDict) {
                     item = setMediaByName(queryDict["media-name"]);
-                }
-                else {
+                } else {
                     item = setMediaByIndex(0);
                 }
                 if (item != undefined && "trigger-overlay-name" in queryDict) {
@@ -275,26 +277,49 @@
                         if (l2) return l2;
                     }
                 }
-            } catch (e) { console.warn('getCurrentSceneLabel error', e); }
+            } catch (e) {
+                console.warn('getCurrentSceneLabel error', e);
+            }
             return null;
         }
 
+        // **FIXED:** Updated logic to handle all new room scene names
         function getRoomKeyFromLabel(label) {
             if (!label) return null;
             var lower = String(label).toLowerCase();
+
+            // First, try to find an exact match from the SCENES object
             for (var f in SCENES) {
                 var rooms = SCENES[f];
                 for (var r in rooms) {
-                    if (String(rooms[r]).toLowerCase() === lower) return r;
+                    if (String(rooms[r]).toLowerCase() === lower) {
+                        return r;
+                    }
                 }
             }
-            if (lower.includes('kitchen')) return 'kitchen';
-            if (lower.includes('living 02')) return 'hall';
+
+            // Fallback to keyword-based matching if no exact match is found
             if (lower.includes('living 01')) return 'entrance';
-            if (lower.includes('bedroom 04')) return 'bedroom04_1';
-            if (lower.includes('bedroom 03')) return 'bedroom03_1';
-            if (lower.includes('bedroom 02')) return 'bedroom02_1';
-            if (lower.includes('bedroom 01')) return 'bedroom01_1';
+            if (lower.includes('living 02')) return 'hall';
+            if (lower.includes('kitchen')) return 'kitchen';
+            
+            if (lower.includes('bedroom 01 2')) return 'bedroom01_1';
+            if (lower.includes('bedroom 01 1')) return 'bedroom01_2';
+            if (lower.includes('bedroom 02 2')) return 'bedroom02_1';
+            if (lower.includes('bedroom 02 1')) return 'bedroom02_2';
+            if (lower.includes('bedroom 03 2')) return 'bedroom03_1';
+            if (lower.includes('bedroom 03 1')) return 'bedroom03_2';
+            if (lower.includes('bedroom 04 1')) return 'bedroom04_1';
+            if (lower.includes('bedroom 04 2')) return 'bedroom04_2';
+            if (lower.includes('bedroom 05 1')) return 'bedroom05_1';
+
+            // Balcony and Toilets
+            if (lower.includes('bolcony')) return 'balcony';
+            if (lower.includes('bedroom_02 copy')) return 'bedroom1_toilet';
+            if (lower.includes('bedroom01_ copy')) return 'bedroom2_toilet';
+            if (lower.includes('bedroom_4_toilet copy')) return 'bedroom3_toilet';
+            if (lower.includes('bedroom_003 copy')) return 'bedroom4_toilet';
+
             return 'entrance';
         }
 
@@ -309,46 +334,125 @@
 
         function highlightActiveFloorButton(activeFloor) {
             var btns = document.querySelectorAll('#floorNav button[data-floor]');
-            btns.forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-floor') === activeFloor); });
+            btns.forEach(function (b) {
+                b.classList.toggle('active', b.getAttribute('data-floor') === activeFloor);
+            });
         }
 
         function setupScenePersistence() {
             // scene listeners
-            player.bindOnObjectsOf('PanoramaPlayListItem', 'begin', function () { setTimeout(updateTracking, 100); }, player, true);
-            player.bind('stateChange', function (e) { if (e.name === 'mediaChanged') setTimeout(updateTracking, 180); }, player, true);
+            player.bindOnObjectsOf('PanoramaPlayListItem', 'begin', function () {
+                setTimeout(updateTracking, 100);
+            }, player, true);
+            player.bind('stateChange', function (e) {
+                if (e.name === 'mediaChanged') setTimeout(updateTracking, 180);
+            }, player, true);
             if (!loadSceneState()) updateTracking();
         }
 
         function updateTracking() {
-            var label = getCurrentSceneLabel(); if (!label) return;
-            var room = getRoomKeyFromLabel(label); var floor = getFloorFromLabel(label);
-            currentRoom = room; if (floor !== currentFloor) { currentFloor = floor; highlightActiveFloorButton(currentFloor); }
-            saveSceneState(); updateCurrentRoomIndicator();
+            var label = getCurrentSceneLabel();
+            if (!label) return;
+            var room = getRoomKeyFromLabel(label);
+            var floor = getFloorFromLabel(label);
+            currentRoom = room;
+            if (floor !== currentFloor) {
+                currentFloor = floor;
+                highlightActiveFloorButton(currentFloor);
+            }
+            saveSceneState();
+            updateCurrentRoomIndicator();
         }
 
-        function saveSceneState() { try { localStorage.setItem('sceneState4BHK', JSON.stringify({ floor: currentFloor, room: currentRoom, t: Date.now() })); } catch (e) { } }
-        function loadSceneState() { try { var raw = localStorage.getItem('sceneState4BHK'); if (!raw) return false; var s = JSON.parse(raw); if (!s) return false; currentFloor = s.floor || currentFloor; currentRoom = s.room || currentRoom; return true; } catch (e) { return false; } }
+        function saveSceneState() {
+            try {
+                localStorage.setItem('sceneState4BHK', JSON.stringify({
+                    floor: currentFloor,
+                    room: currentRoom,
+                    t: Date.now()
+                }));
+            } catch (e) {}
+        }
 
+        function loadSceneState() {
+            try {
+                var raw = localStorage.getItem('sceneState4BHK');
+                if (!raw) return false;
+                var s = JSON.parse(raw);
+                if (!s) return false;
+                currentFloor = s.floor || currentFloor;
+                currentRoom = s.room || currentRoom;
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // **FIXED:** `switchFloor` now correctly uses the new room and floor mapping logic.
         function switchFloor(targetFloor) {
             if (!isInitialized || !player) return;
+
+            // Update the current state based on the current scene before switching
+            var currentSceneLabel = getCurrentSceneLabel();
+            if (currentSceneLabel) {
+                currentRoom = getRoomKeyFromLabel(currentSceneLabel) || currentRoom;
+                currentFloor = getFloorFromLabel(currentSceneLabel) || currentFloor;
+            }
+
             if (targetFloor === currentFloor) return;
-            var label = getCurrentSceneLabel();
-            if (label) { currentRoom = getRoomKeyFromLabel(label) || currentRoom || 'entrance'; currentFloor = getFloorFromLabel(label) || currentFloor; }
-            var targetMap = SCENES[targetFloor]; if (!targetMap) return;
-            var targetScene = targetMap[currentRoom] || targetMap.entrance; setMediaByName(targetScene);
+            var targetMap = SCENES[targetFloor];
+            if (!targetMap) return;
+            var targetScene = targetMap[currentRoom] || targetMap.entrance;
+            setMediaByName(targetScene);
             setTimeout(updateTracking, 400);
         }
 
+        // **FIXED:** The room navigation bar now includes all the new rooms.
         function buildRoomNavBar() {
-            var container = document.getElementById('roomNav'); if (!container) return; container.innerHTML = '';
+            var container = document.getElementById('roomNav');
+            if (!container) return;
+            container.innerHTML = '';
             var entries = [
-                { key: 'entrance', label: 'Entrance', icon: 'fa-person-booth' },
-                { key: 'hall', label: 'Living Room', icon: 'fa-couch' },
-                { key: 'kitchen', label: 'Kitchen', icon: 'fa-kitchen-set' },
-                { key: 'bedroom01_1', label: 'Bedroom 1', icon: 'fa-bed' },
-                { key: 'bedroom02_1', label: 'Bedroom 2', icon: 'fa-bed' },
-                { key: 'bedroom03_1', label: 'Bedroom 3', icon: 'fa-bed' },
-                { key: 'bedroom04_1', label: 'Bedroom 4', icon: 'fa-bed' }
+                {
+                    key: 'entrance',
+                    label: 'Entrance',
+                    icon: 'fa-person-booth'
+                },
+                {
+                    key: 'hall',
+                    label: 'Living Room',
+                    icon: 'fa-couch'
+                },
+                {
+                    key: 'kitchen',
+                    label: 'Kitchen',
+                    icon: 'fa-kitchen-set'
+                },
+                {
+                    key: 'bedroom01_1',
+                    label: 'Bedroom 1',
+                    icon: 'fa-bed'
+                },
+                {
+                    key: 'bedroom02_1',
+                    label: 'Bedroom 2',
+                    icon: 'fa-bed'
+                },
+                {
+                    key: 'bedroom03_1',
+                    label: 'Bedroom 3',
+                    icon: 'fa-bed'
+                },
+                {
+                    key: 'bedroom04_1',
+                    label: 'Bedroom 4',
+                    icon: 'fa-bed'
+                },
+                {
+                    key: 'bedroom05_1',
+                    label: 'Bedroom 5',
+                    icon: 'fa-bed'
+                },
             ];
             var floorMap = SCENES[currentFloor] || {};
             entries.forEach(function (item) {
@@ -356,20 +460,51 @@
                 var btn = document.createElement('button');
                 btn.setAttribute('data-room', item.key);
                 btn.innerHTML = '<i class="fa-solid ' + item.icon + '"></i> ' + item.label;
-                btn.onclick = function () { var scene = (SCENES[currentFloor] || {})[item.key]; if (scene) setMediaByName(scene); };
+                btn.onclick = function () {
+                    var scene = (SCENES[currentFloor] || {})[item.key];
+                    if (scene) setMediaByName(scene);
+                };
                 container.appendChild(btn);
             });
         }
 
-        function updateCurrentRoomIndicator() { var el = document.getElementById('currentRoomInfo'); if (!el) return; el.textContent = currentFloor + ' Floor - ' + (currentRoom || ''); el.classList.add('show'); setTimeout(function () { el.classList.remove('show'); }, 2500); }
+        function updateCurrentRoomIndicator() {
+            var el = document.getElementById('currentRoomInfo');
+            if (!el) return;
+            el.textContent = currentFloor + ' Floor - ' + (currentRoom || '');
+            el.classList.add('show');
+            setTimeout(function () {
+                el.classList.remove('show');
+            }, 2500);
+        }
 
         // Top-right actions
         var audioMuted = false;
+
         function goHome() {
             window.location.href = '../../index.html';
         }
-        function toggleFullscreen() { var el = document.documentElement; if (!document.fullscreenElement) { if (el.requestFullscreen) el.requestFullscreen(); } else { if (document.exitFullscreen) document.exitFullscreen(); } }
-        function toggleAudio() { audioMuted = !audioMuted; var btn = document.getElementById('audioBtn'); if (audioMuted) { player.getById('pauseGlobalAudios')(); if (btn) btn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>'; } else { player.getById('resumeGlobalAudios')(); if (btn) btn.innerHTML = '<i class="fa-solid fa-volume-high"></i>'; } }
+
+        function toggleFullscreen() {
+            var el = document.documentElement;
+            if (!document.fullscreenElement) {
+                if (el.requestFullscreen) el.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        }
+
+        function toggleAudio() {
+            audioMuted = !audioMuted;
+            var btn = document.getElementById('audioBtn');
+            if (audioMuted) {
+                player.getById('pauseGlobalAudios')();
+                if (btn) btn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+            } else {
+                player.getById('resumeGlobalAudios')();
+                if (btn) btn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+            }
+        }
 
         function showPreloader() {
             var preloadContainer = document.getElementById('preloadContainer');
@@ -387,8 +522,7 @@
                 preloadContainer.addEventListener(transitionEndName, hide, false);
                 preloadContainer.style.opacity = 0;
                 setTimeout(hide, 500); //Force hide. Some cases the transitionend event isn't dispatched with an iFrame.
-            }
-            else {
+            } else {
                 hide();
             }
 
@@ -429,8 +563,7 @@
                 var inIFrame = false;
                 try {
                     inIFrame = (window.self !== window.top);
-                }
-                catch (e) {
+                } catch (e) {
                     inIFrame = true;
                 }
                 if (!inIFrame) {
@@ -527,6 +660,20 @@
                 audioBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
             }
         }
+
+        // Orientation check
+        function checkOrientation() {
+            const overlay = document.getElementById("rotateOverlay");
+            if (window.innerHeight > window.innerWidth && /Mobi|Android/i.test(navigator.userAgent)) {
+                overlay.style.display = "flex";
+            } else {
+                overlay.style.display = "none";
+            }
+        }
+
+        window.addEventListener("resize", checkOrientation);
+        window.addEventListener("orientationchange", checkOrientation);
+        window.addEventListener("load", checkOrientation);
     </script>
     <style type="text/css">
         html,
@@ -679,6 +826,46 @@
         #currentRoomInfo.show {
             opacity: 1;
         }
+
+        #rotateOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 1.5rem;
+            z-index: 999999;
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        #rotateOverlay i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            animation: rotatePhone 2s infinite ease-in-out;
+        }
+
+        @keyframes rotatePhone {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(90deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
+        }
     </style>
 
 </head>
@@ -688,6 +875,11 @@
         <source src="/assets/audio/audio.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
+    <!-- Orientation overlay -->
+    <div id="rotateOverlay">
+        <i class="fa-solid fa-mobile-screen-button"></i>
+        <p>Please rotate your device<br>for the best experience</p>
+    </div>
     <div id="preloadContainer" style="background-color:rgba(255,255,255,1)">
         <div style="z-index: 4; position: absolute; left: 0%; top: 50%; width: 100.00%; height: 10.00%">
             <div style="text-align:left; color:#000; ">
@@ -701,7 +893,6 @@
     </div>
     <div id="viewer"></div>
 
-    <!-- Top-right actions -->
     <div id="topActions">
         <button title="Home" onclick="goHome()"><i class="fa-solid fa-house"></i></button>
         <button title="Fullscreen" onclick="toggleFullscreen()"><i class="fa-solid fa-expand"></i></button>
@@ -710,7 +901,6 @@
         </button>
     </div>
 
-    <!-- Floor buttons (vertical) -->
     <div id="floorNav">
         <button data-floor="17th" onclick="switchFloor('17th')">17F</button>
         <button data-floor="23rd" onclick="switchFloor('23rd')">23F</button>
@@ -718,10 +908,8 @@
         <button data-floor="33rd" onclick="switchFloor('33rd')">33F</button>
     </div>
 
-    <!-- Bottom room bar -->
     <div id="roomNav"></div>
 
-    <!-- Current room indicator -->
     <div id="currentRoomInfo"></div>
 </body>
 

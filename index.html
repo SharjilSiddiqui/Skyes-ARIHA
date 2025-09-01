@@ -10,7 +10,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
@@ -77,10 +76,11 @@
             width: 120px;
         }
 
+        /* UPDATED: Moves the Skyes logo to the top right */
         .logo-below {
             position: absolute;
-            top: 150px;
-            left: 20px;
+            top: 20px;
+            right: 20px;
             z-index: 10;
             width: 130px;
         }
@@ -198,11 +198,11 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
         }
 
-        /* Day/Night Toggle */
+        /* UPDATED: Moves the day/night toggle to the bottom left */
         .day-night-toggle {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            bottom: 20px;
+            left: 20px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -246,12 +246,14 @@
         /* Mobile styles */
         @media (max-width: 768px) {
             .logo-left {
-                width: 80px;
+                width: 60px;
             }
 
+            /* UPDATED: Adjusts the mobile position of the Skyes logo */
             .logo-below {
-                width: 80px;
-                top: 110px;
+                width: 60px;
+                top: 20px;
+                right: 20px;
             }
 
             .button-group {
@@ -295,34 +297,28 @@
 </head>
 
 <body>
-    <!-- Rotate message overlay -->
     <div id="rotate-message">
         <img src="https://cdn-icons-png.flaticon.com/512/1827/1827504.png" alt="Rotate Device">
         <p>Please rotate your device</p>
     </div>
 
-    <!-- Page Content Wrapper -->
     <div id="page-content">
         <audio id="background-audio" loop muted>
             <source src="./assets/audio/audio.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
 
-        <!-- Logos -->
         <img src="./assets/ARIHA logo.png" alt="Ariha Logo" class="logo-left">
         <img src="./assets/Skyes_ARIHA.png" alt="Skyes Logo" class="logo-below">
 
-        <!-- Left-center VR button -->
         <button class="vr-btn" onclick="location.href='./project/project.html'">
             <i class="fa-solid fa-vr-cardboard"></i>
         </button>
 
-        <!-- Left-center Amenities button -->
         <button class="amenities-btn" onclick="location.href='./lobby/lobby.html'">
             <i class="fa-solid fa-concierge-bell"></i>
         </button>
 
-        <!-- Right side buttons -->
         <div class="button-group">
             <button class="tour-btn" onclick="location.href='./3bhk/3bhk.html'">
                 <i class="fa-solid fa-building"></i> 3 BhK
@@ -332,7 +328,6 @@
             </button>
         </div>
 
-        <!-- Bottom-right circular buttons -->
         <div class="utility-buttons">
             <button class="utility-btn" onclick="location.href='./index.html'">
                 <i class="fa-solid fa-house"></i>
@@ -345,7 +340,6 @@
             </button>
         </div>
 
-        <!-- Top-Right Theme Toggle -->
         <div class="day-night-toggle">
             <label id="themeLabel" for="toggleTheme">NIGHT</label>
             <input type="checkbox" id="toggleTheme" checked />
@@ -401,10 +395,10 @@
             toggle.addEventListener("change", () => {
                 if (toggle.checked) {
                     document.body.style.backgroundImage = "var(--night-bg)";
-                    themeLabel.textContent = "NIGHT";
+                    themeLabel.textContent = "DAY";
                 } else {
                     document.body.style.backgroundImage = "var(--day-bg)";
-                    themeLabel.textContent = "DAY";
+                    themeLabel.textContent = "NIGHT";
                 }
             });
         };
