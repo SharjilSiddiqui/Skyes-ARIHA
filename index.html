@@ -37,6 +37,37 @@
             transition: background-image 0.6s ease-in-out;
         }
 
+        /* Overlay for rotate message */
+        #rotate-message {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        #rotate-message img {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+
+        #rotate-message p {
+            font-size: 18px;
+            color: #333;
+        }
+
+        /* Hide all page content wrapper initially */
+        #page-content {
+            display: none;
+        }
+
         /* Logo Styles */
         .logo-left {
             position: absolute;
@@ -264,55 +295,81 @@
 </head>
 
 <body>
-    <audio id="background-audio" loop muted>
-        <source src="./assets/audio/audio.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-
-    <!-- Logos -->
-    <img src="./assets/ARIHA logo.png" alt="Ariha Logo" class="logo-left">
-    <img src="./assets/Skyes_ARIHA.png" alt="Skyes Logo" class="logo-below">
-
-    <!-- Left-center VR button -->
-    <button class="vr-btn" onclick="location.href='./project/project.html'">
-        <i class="fa-solid fa-vr-cardboard"></i>
-    </button>
-
-    <!-- Left-center Amenities button -->
-    <button class="amenities-btn" onclick="location.href='./lobby/lobby.html'">
-        <i class="fa-solid fa-concierge-bell"></i>
-    </button>
-
-    <!-- Right side buttons -->
-    <div class="button-group">
-        <button class="tour-btn" onclick="location.href='./3bhk/3bhk.html'">
-            <i class="fa-solid fa-building"></i> 3 BhK
-        </button>
-        <button class="tour-btn" onclick="location.href='./4bhk/4bhk.html'">
-            <i class="fa-solid fa-city"></i> 4 BhK
-        </button>
+    <!-- Rotate message overlay -->
+    <div id="rotate-message">
+        <img src="https://cdn-icons-png.flaticon.com/512/1827/1827504.png" alt="Rotate Device">
+        <p>Please rotate your device</p>
     </div>
 
-    <!-- Bottom-right circular buttons -->
-    <div class="utility-buttons">
-        <button class="utility-btn" onclick="location.href='./index.html'">
-            <i class="fa-solid fa-house"></i>
-        </button>
-        <button class="utility-btn" onclick="toggleFullscreen()">
-            <i class="fa-solid fa-expand"></i>
-        </button>
-        <button class="utility-btn" id="audioBtn" onclick="toggleAudio()">
-            <i class="fa-solid fa-volume-xmark"></i>
-        </button>
-    </div>
+    <!-- Page Content Wrapper -->
+    <div id="page-content">
+        <audio id="background-audio" loop muted>
+            <source src="./assets/audio/audio.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
 
-    <!-- Top-Right Theme Toggle -->
-    <div class="day-night-toggle">
-        <label id="themeLabel" for="toggleTheme">NIGHT</label>
-        <input type="checkbox" id="toggleTheme" checked />
+        <!-- Logos -->
+        <img src="./assets/ARIHA logo.png" alt="Ariha Logo" class="logo-left">
+        <img src="./assets/Skyes_ARIHA.png" alt="Skyes Logo" class="logo-below">
+
+        <!-- Left-center VR button -->
+        <button class="vr-btn" onclick="location.href='./project/project.html'">
+            <i class="fa-solid fa-vr-cardboard"></i>
+        </button>
+
+        <!-- Left-center Amenities button -->
+        <button class="amenities-btn" onclick="location.href='./lobby/lobby.html'">
+            <i class="fa-solid fa-concierge-bell"></i>
+        </button>
+
+        <!-- Right side buttons -->
+        <div class="button-group">
+            <button class="tour-btn" onclick="location.href='./3bhk/3bhk.html'">
+                <i class="fa-solid fa-building"></i> 3 BhK
+            </button>
+            <button class="tour-btn" onclick="location.href='./4bhk/4bhk.html'">
+                <i class="fa-solid fa-city"></i> 4 BhK
+            </button>
+        </div>
+
+        <!-- Bottom-right circular buttons -->
+        <div class="utility-buttons">
+            <button class="utility-btn" onclick="location.href='./index.html'">
+                <i class="fa-solid fa-house"></i>
+            </button>
+            <button class="utility-btn" onclick="toggleFullscreen()">
+                <i class="fa-solid fa-expand"></i>
+            </button>
+            <button class="utility-btn" id="audioBtn" onclick="toggleAudio()">
+                <i class="fa-solid fa-volume-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Top-Right Theme Toggle -->
+        <div class="day-night-toggle">
+            <label id="themeLabel" for="toggleTheme">NIGHT</label>
+            <input type="checkbox" id="toggleTheme" checked />
+        </div>
     </div>
 
     <script>
+        // Orientation check
+        function checkOrientation() {
+            if (window.innerHeight > window.innerWidth) {
+                // Portrait
+                document.getElementById("rotate-message").style.display = "flex";
+                document.getElementById("page-content").style.display = "none";
+            } else {
+                // Landscape
+                document.getElementById("rotate-message").style.display = "none";
+                document.getElementById("page-content").style.display = "block";
+            }
+        }
+
+        window.addEventListener("load", checkOrientation);
+        window.addEventListener("resize", checkOrientation);
+        window.addEventListener("orientationchange", checkOrientation);
+
         // Audio toggle
         function toggleAudio() {
             const audio = document.getElementById("background-audio");
@@ -331,6 +388,8 @@
 
         // Day/Night toggle
         window.onload = function () {
+            checkOrientation(); // check orientation first
+
             const toggle = document.getElementById("toggleTheme");
             const themeLabel = document.getElementById("themeLabel");
 
