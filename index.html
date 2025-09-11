@@ -162,7 +162,8 @@
 
         /* Left-center VR & Amenities buttons */
         .vr-btn,
-        .amenities-btn {
+        .amenities-btn,
+        .floor-plans-btn {
             position: absolute;
             left: 20px;
             width: 65px;
@@ -191,8 +192,14 @@
             transform: translateY(-50%);
         }
 
+        .floor-plans-btn {
+            top: calc(50% + 160px);
+            transform: translateY(-50%);
+        }
+
         .vr-btn:hover,
-        .amenities-btn:hover {
+        .amenities-btn:hover,
+        .floor-plans-btn:hover {
             background: #c00064;
             transform: translateY(-50%) scale(1.1);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
@@ -243,6 +250,99 @@
             background: #fff;
         }
 
+        /* Fullscreen Modal & Slider */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slider-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: none;
+        }
+
+        .slider-image.active {
+            display: block;
+        }
+
+        .prev,
+        .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            transition: 0.6s ease;
+            user-select: none;
+            -webkit-user-select: none;
+            transform: translateY(-50%);
+            background-color: black;
+            z-index: 10;
+        }
+
+        .prev {
+            left: 0; /* Add this line to align the button to the left */
+            border-radius: 0 3px 3px 0;
+        }
+
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev:hover,
+        .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: #bbb;
+            text-decoration: none;
+        }
+
         /* Mobile styles */
         @media (max-width: 768px) {
             .logo-left {
@@ -281,7 +381,8 @@
             }
 
             .vr-btn,
-            .amenities-btn {
+            .amenities-btn,
+            .floor-plans-btn {
                 width: 55px;
                 height: 55px;
                 font-size: 1.4rem;
@@ -319,6 +420,10 @@
             <i class="fa-solid fa-concierge-bell"></i>
         </button>
 
+        <button class="floor-plans-btn" onclick="openModal()">
+            <i class="fa-solid fa-ruler-combined"></i>
+        </button>
+
         <div class="button-group">
             <button class="tour-btn" onclick="location.href='./3bhk/3bhk.html'">
                 <i class="fa-solid fa-building"></i> 3 BhK
@@ -343,6 +448,16 @@
         <div class="day-night-toggle">
             <label id="themeLabel" for="toggleTheme">NIGHT</label>
             <input type="checkbox" id="toggleTheme" checked />
+        </div>
+    </div>
+
+    <div id="floorPlansModal" class="modal">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <div class="slider-container">
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <div class="slider" id="imageSlider">
+                </div>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
         </div>
     </div>
 
@@ -413,6 +528,73 @@
                 }
             }
         }
+
+        // Floor plans modal & slider logic
+        const floorPlansModal = document.getElementById("floorPlansModal");
+        const imageSlider = document.getElementById("imageSlider");
+        let slideIndex = 1;
+
+        // Array of 9 image paths. Replace with your actual image paths.
+        const floorPlanImages = [
+            './assets/floor-plans/Parking-Floor.jpg',
+            './assets/floor-plans/Ground-Floor.jpg',
+            './assets/floor-plans/7th-Floor-Eco-Deck.jpg',
+            './assets/floor-plans/15-22-29-Refuge-Floor.jpg',
+            './assets/floor-plans/16-21-23-28-30-35-Typical-Floor.jpg',
+            './assets/floor-plans/36th-Floor-Duplex-Lower.jpg',
+            './assets/floor-plans/37th-Floor-Duplex-Upper.jpg',
+            './assets/floor-plans/3BHK-Typical-Floor-Without-Text.jpg',
+            './assets/floor-plans/4BHK-Typical-Floor-Without-Text.jpg',
+        ];
+
+        // Function to create and inject image elements
+        function createImages() {
+            floorPlanImages.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.classList.add('slider-image');
+                imageSlider.appendChild(img);
+            });
+        }
+        createImages();
+
+        function openModal() {
+            floorPlansModal.style.display = "flex";
+            showSlides(slideIndex);
+        }
+
+        function closeModal() {
+            floorPlansModal.style.display = "none";
+        }
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function showSlides(n) {
+            let i;
+            const slides = document.getElementsByClassName("slider-image");
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slides[slideIndex - 1].style.display = "block";
+        }
+
+        // Close modal if user clicks outside of the content
+        window.addEventListener('click', function (event) {
+            if (event.target == floorPlansModal) {
+                closeModal();
+            }
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function (event) {
+            if (event.key === "Escape" || event.key === "Esc") {
+                closeModal();
+            }
+        });
     </script>
 </body>
 
