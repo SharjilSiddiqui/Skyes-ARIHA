@@ -346,6 +346,7 @@
 
         /* Mobile styles */
         @media (max-width: 768px) {
+            /* button { background: red !important; } */
             .logo-left {
                 width: 40px;
             }
@@ -365,7 +366,7 @@
             }
 
             .tour-btn {
-                min-width: 120px;
+                /* min-width: 120px; */
                 height: 50px;
                 font-size: 1rem;
                 border-radius: 30px;
@@ -396,13 +397,8 @@
             .vr-btn,
             .amenities-btn,
             .floor-plans-btn {
-                min-width: unset;
-                width: 60px;
-                height: 60px;
-                padding: 0;
-                border-radius: 50%;
-                justify-content: center;
-                gap: 0;
+                width: 40px;
+                height: 80px;
             }
 
             .vr-btn:hover,
@@ -411,8 +407,76 @@
                 transform: scale(1.1);
             }
 
-            .btn-text {
-                display: none;
+            .utility-buttons {
+                bottom: calc(25px + env(safe-area-inset-bottom));
+                right: 15px;
+                gap: 10px;
+            }
+            
+            .day-night-toggle {
+                bottom: 25px;
+                left: 15px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            /* button { background: red !important; } */
+            .logo-left {
+                width: 60px;
+            }
+
+            /* UPDATED: Adjusts the mobile position of the Skyes logo */
+            .logo-below {
+                width: 60px;
+                top: 20px;
+                right: 20px;
+            }
+
+            .button-group {
+                top: 50%;
+                right: 5%;
+                transform: translateY(-50%);
+                align-items: flex-end;
+            }
+
+            .tour-btn {
+                width: 30px;
+                height: 42px;
+                font-size: .8rem;
+                /* border-radius: 30px; */
+            }
+
+            .tour-btn i {
+                font-size: 1rem;
+            }
+
+            .utility-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            /* ADDED: Mobile layout for left buttons */
+            .left-button-group {
+                top: 50%;
+                left: 10px;
+                transform: translateY(-50%);
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .vr-btn,
+            .amenities-btn,
+            .floor-plans-btn {
+                width: 50px;
+                height: 43px;
+            }
+
+            .vr-btn:hover,
+            .amenities-btn:hover,
+            .floor-plans-btn:hover {
+                transform: scale(1.1);
             }
 
             .utility-buttons {
