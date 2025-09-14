@@ -230,8 +230,8 @@
             kitchen: '3bhk kitchen',
             bedroom01_1: '3bhk bedroom02 17th',
             bedroom01_2: '3bhk bedroom01 17th',
-            bedroom02_1: '3bhk bedroom02 1 17th',
-            bedroom02_2: '3bhk bedroom02 2 17th',
+            bedroom02_1: '3bhk bedroom02 2 17th',
+            bedroom02_2: '3bhk bedroom02 1 17th',
             bedroom03_1: '3bhk bedroom03 01 17th',
             bedroom03_2: '3bhk bedroom03 02 17th',
             balcony: '3BHK_Bolcony_17',
@@ -310,8 +310,8 @@
         }
 
         // 2. Use the real scene name to get the correct current room and floor.
-        currentRoom = getRoomFromSceneName(currentSceneLabel);
-        currentFloor = getFloorFromSceneName(currentSceneLabel);
+        currentRoom = getRoomKeyFromSceneLabel(currentSceneLabel);
+        currentFloor = getFloorFromSceneLabel(currentSceneLabel);
         highlightActiveFloorButton(currentFloor);
 
         // Check if the requested floor is the same as the current floor after the refresh.
@@ -443,8 +443,8 @@
                                     var expectedScene = SCENES[floor][room];
                                     console.log(`Result for ${room} -> ${floor}:`, 
                                         currentScene === expectedScene ? 'PASSED' : 'FAILED');
-                                    console.log(`  Expected: ${expectedScene}`);
-                                    console.log(`  Got: ${currentScene}`);
+                                    console.log(`  Expected: ${expectedScene}`);
+                                    console.log(`  Got: ${currentScene}`);
                                 }, 1000);
                             }, (floorIndex - 1) * 2000);
                         }
@@ -460,7 +460,7 @@
         Object.keys(SCENES).forEach(function(floor) {
             console.log(floor + ' Floor:');
             Object.keys(SCENES[floor]).forEach(function(room) {
-                console.log('  ' + room + ': ' + SCENES[floor][room]);
+                console.log('  ' + room + ': ' + SCENES[floor][room]);
             });
         });
         console.log('===========================');
@@ -656,6 +656,16 @@
         if (!target) return;
         setMediaByName(target);
     }
+    
+    // Custom function to switch specifically to the balcony
+    function switchBalcony(floor) {
+        if (SCENES[floor] && SCENES[floor].balcony) {
+            setMediaByName(SCENES[floor].balcony);
+        } else {
+            console.warn('Balcony scene not found for floor', floor);
+        }
+    }
+
 
     // Top-right actions
     function goHome() {
@@ -704,15 +714,16 @@
         }
         // 🚀 FALLBACK: If no exact match, use the keyword-based heuristic.
         console.log('No exact scene label match found. Falling back to keyword search.');
-
+        
+        // **FIXED:** Reordered and corrected keywords
         if (s.includes('balcony')) return 'balcony';
-        if (s.includes('bedroom_01_toilet')) return 'bedroom1_toilet';
-        if (s.includes('bed02_toilet')) return 'bedroom2_toilet';
+        if (s.includes('bedroom01_toilet')) return 'bedroom1_toilet';
+        if (s.includes('bed2_toilet')) return 'bedroom2_toilet';
         if (s.includes('bdroom03_toilet')) return 'bedroom3_toilet';
         if (s.includes('bedroom02 1')) return 'bedroom02_1'; // More specific check
         if (s.includes('bedroom02 2')) return 'bedroom02_2'; // More specific check
-        if (s.includes('bedroom03 1')) return 'bedroom03_1'; // More specific check
-        if (s.includes('bedroom03 2')) return 'bedroom03_2'; // More specific check
+        if (s.includes('bedroom03 01')) return 'bedroom03_1'; // More specific check
+        if (s.includes('bedroom03 02')) return 'bedroom03_2'; // More specific check
         if (s.includes('bedroom02')) return 'bedroom02';
         if (s.includes('bedroom01')) return 'bedroom01';
         if (s.includes('kitchen')) return 'kitchen';
@@ -723,7 +734,7 @@
         console.log('No room match found for:', sceneName, '- defaulting to entrance');
         return 'entrance';
     }
-
+    
     // New: resolve room key by scanning SCENES by exact label match
     function getRoomKeyFromSceneLabel(sceneLabel) {
         if (!sceneLabel) return null;
@@ -804,8 +815,8 @@
                     console.log("=== SCENE CHANGE EVENT ===");
                     console.log("Raw scene name:", sceneName);
 
-                    var newRoom = getRoomFromSceneName(sceneName);
-                    var newFloor = getFloorFromSceneName(sceneName);
+                    var newRoom = getRoomKeyFromSceneLabel(sceneName);
+                    var newFloor = getFloorFromSceneLabel(sceneName);
 
                     console.log("Detected room:", newRoom);
                     console.log("Detected floor:", newFloor);
@@ -845,8 +856,8 @@
                         console.log("=== STATE CHANGE EVENT (mediaChanged) ===");
                         console.log("Scene name:", sceneName);
                         
-                        var newRoom = getRoomFromSceneName(sceneName);
-                        var newFloor = getFloorFromSceneName(sceneName);
+                        var newRoom = getRoomKeyFromSceneLabel(sceneName);
+                        var newFloor = getFloorFromSceneLabel(sceneName);
                         
                         console.log("Detected room:", newRoom);
                         console.log("Detected floor:", newFloor);
@@ -882,14 +893,14 @@
             if (isInitialized && player) {
                 var sceneName = getCurrentSceneName();
                 if (sceneName && sceneName !== 'begin' && sceneName !== '') {
-                    var roomType = getRoomFromSceneName(sceneName);
-                    var floorType = getFloorFromSceneName(sceneName);
+                    var roomType = getRoomKeyFromSceneLabel(sceneName);
+                    var floorType = getFloorFromSceneLabel(sceneName);
                     
                     // Only update if something actually changed
                     if (roomType !== currentRoom || floorType !== currentFloor) {
                         console.log('Periodic check detected change:');
-                        console.log('  Room:', currentRoom, '->', roomType);
-                        console.log('  Floor:', currentFloor, '->', floorType);
+                        console.log('  Room:', currentRoom, '->', roomType);
+                        console.log('  Floor:', currentFloor, '->', floorType);
                         
                         currentRoom = roomType;
                         currentFloor = floorType;
@@ -984,8 +995,8 @@
         var sceneName = getCurrentSceneName();
         if (!sceneName) return;
 
-        var room = getRoomFromSceneName(sceneName);
-        var floor = getFloorFromSceneName(sceneName);
+        var room = getRoomKeyFromSceneLabel(sceneName);
+        var floor = getFloorFromSceneLabel(sceneName);
 
         currentRoom = room;
         if (floor !== currentFloor) {
@@ -1331,7 +1342,6 @@
         <source src="/assets/audio/audio.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
-    <!-- Orientation overlay -->
     <div id="rotateOverlay">
         <i class="fa-solid fa-mobile-screen-button"></i>
         <p>Please rotate your device<br>for the best experience</p>
@@ -1374,7 +1384,6 @@
 
     <div id="roomNav"></div>
 
-    <!-- <div id="currentRoomInfo"></div> -->
-</body>
+    </body>
 
 </html>

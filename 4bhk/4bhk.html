@@ -160,7 +160,8 @@
                 } else if ("media-name" in queryDict) {
                     item = setMediaByName(queryDict["media-name"]);
                 } else {
-                    item = setMediaByIndex(0);
+                    // Load 17th floor entrance by default
+                    item = setMediaByName(SCENES['17th'].entrance);
                 }
                 if (item != undefined && "trigger-overlay-name" in queryDict) {
                     triggerOverlayByName(item, queryDict["trigger-overlay-name"], "trigger-overlay-event" in queryDict ? queryDict["trigger-overlay-event"] : "click");
@@ -283,52 +284,66 @@
             return null;
         }
 
-        // **FIXED:** Updated logic to handle all new room scene names
+        // **FIXED:** Improved room detection logic with proper balcony matching
         function getRoomKeyFromLabel(label) {
             if (!label) return null;
-            var lower = String(label).toLowerCase();
+            var lower = String(label).toLowerCase().replace(/\s+/g, ' ').trim();
+
+            console.log('Detecting room for label:', label, 'normalized:', lower);
 
             // First, try to find an exact match from the SCENES object
             for (var f in SCENES) {
                 var rooms = SCENES[f];
                 for (var r in rooms) {
-                    if (String(rooms[r]).toLowerCase() === lower) {
+                    var sceneName = String(rooms[r]).toLowerCase().replace(/\s+/g, ' ').trim();
+                    if (sceneName === lower) {
+                        console.log('Exact match found:', r, 'for scene:', rooms[r]);
                         return r;
                     }
                 }
             }
 
-            // Fallback to keyword-based matching if no exact match is found
-            if (lower.includes('living 01')) return 'entrance';
-            if (lower.includes('living 02')) return 'hall';
+            // **FIXED:** Improved pattern matching with better balcony detection
+            // Balcony detection - check for various balcony spelling variations
+            if (lower.includes('bolcony') || lower.includes('balcony')) {
+                console.log('Balcony detected');
+                return 'balcony';
+            }
+
+            // Living room patterns
+            if (lower.includes('living 01') || lower.includes('living01')) return 'entrance';
+            if (lower.includes('living 02') || lower.includes('living02')) return 'hall';
+            
+            // Kitchen
             if (lower.includes('kitchen')) return 'kitchen';
             
-            if (lower.includes('bedroom 01 2')) return 'bedroom01_1';
-            if (lower.includes('bedroom 01 1')) return 'bedroom01_2';
-            if (lower.includes('bedroom 02 2')) return 'bedroom02_1';
-            if (lower.includes('bedroom 02 1')) return 'bedroom02_2';
-            if (lower.includes('bedroom 03 2')) return 'bedroom03_1';
-            if (lower.includes('bedroom 03 1')) return 'bedroom03_2';
-            if (lower.includes('bedroom 04 1')) return 'bedroom04_1';
-            if (lower.includes('bedroom 04 2')) return 'bedroom04_2';
-            if (lower.includes('bedroom 05 1')) return 'bedroom05_1';
+            // Bedroom patterns - more specific matching
+            if (lower.includes('bedroom 01 2') || lower.includes('bedroom01 2')) return 'bedroom01_1';
+            if (lower.includes('bedroom 01 1') || lower.includes('bedroom01 1')) return 'bedroom01_2';
+            if (lower.includes('bedroom 02 2') || lower.includes('bedroom02 2')) return 'bedroom02_1';
+            if (lower.includes('bedroom 02 1') || lower.includes('bedroom02 1')) return 'bedroom02_2';
+            if (lower.includes('bedroom 03 2') || lower.includes('bedroom03 2')) return 'bedroom03_1';
+            if (lower.includes('bedroom 03 1') || lower.includes('bedroom03 1')) return 'bedroom03_2';
+            if (lower.includes('bedroom 04 1') || lower.includes('bedroom04 1')) return 'bedroom04_1';
+            if (lower.includes('bedroom 04 2') || lower.includes('bedroom04 2')) return 'bedroom04_2';
+            if (lower.includes('bedroom 05 1') || lower.includes('bedroom05 1')) return 'bedroom05_1';
 
-            // Balcony and Toilets
-            if (lower.includes('bolcony')) return 'balcony';
+            // Toilet patterns
             if (lower.includes('bedroom_02 copy')) return 'bedroom1_toilet';
             if (lower.includes('bedroom01_ copy')) return 'bedroom2_toilet';
             if (lower.includes('bedroom_4_toilet copy')) return 'bedroom3_toilet';
             if (lower.includes('bedroom_003 copy')) return 'bedroom4_toilet';
 
+            console.log('No specific match found, defaulting to entrance');
             return 'entrance';
         }
 
         function getFloorFromLabel(label) {
             var lower = String(label || '').toLowerCase();
-            if (lower.includes('33rd')) return '33rd';
-            if (lower.includes('28th')) return '28th';
-            if (lower.includes('23rd')) return '23rd';
-            if (lower.includes('17th')) return '17th';
+            if (lower.includes('33rd') || lower.includes('33')) return '33rd';
+            if (lower.includes('28th') || lower.includes('28')) return '28th';
+            if (lower.includes('23rd') || lower.includes('23')) return '23rd';
+            if (lower.includes('17th') || lower.includes('17')) return '17th';
             return currentFloor;
         }
 
@@ -353,8 +368,14 @@
         function updateTracking() {
             var label = getCurrentSceneLabel();
             if (!label) return;
+            
+            console.log('Updating tracking for scene:', label);
+            
             var room = getRoomKeyFromLabel(label);
             var floor = getFloorFromLabel(label);
+            
+            console.log('Detected room:', room, 'floor:', floor);
+            
             currentRoom = room;
             if (floor !== currentFloor) {
                 currentFloor = floor;
@@ -366,12 +387,16 @@
 
         function saveSceneState() {
             try {
-                localStorage.setItem('sceneState4BHK', JSON.stringify({
+                var state = {
                     floor: currentFloor,
                     room: currentRoom,
                     t: Date.now()
-                }));
-            } catch (e) {}
+                };
+                console.log('Saving state:', state);
+                localStorage.setItem('sceneState4BHK', JSON.stringify(state));
+            } catch (e) {
+                console.warn('Error saving state:', e);
+            }
         }
 
         function loadSceneState() {
@@ -382,32 +407,68 @@
                 if (!s) return false;
                 currentFloor = s.floor || currentFloor;
                 currentRoom = s.room || currentRoom;
+                console.log('Loaded state:', s);
                 return true;
             } catch (e) {
+                console.warn('Error loading state:', e);
                 return false;
             }
         }
 
-        // **FIXED:** `switchFloor` now correctly uses the new room and floor mapping logic.
+        // **FIXED:** Enhanced `switchFloor` with better debugging and fallback logic
         function switchFloor(targetFloor) {
-            if (!isInitialized || !player) return;
-
-            // Update the current state based on the current scene before switching
-            var currentSceneLabel = getCurrentSceneLabel();
-            if (currentSceneLabel) {
-                currentRoom = getRoomKeyFromLabel(currentSceneLabel) || currentRoom;
-                currentFloor = getFloorFromLabel(currentSceneLabel) || currentFloor;
+            if (!isInitialized || !player) {
+                console.warn('Player not initialized, cannot switch floor');
+                return;
             }
 
-            if (targetFloor === currentFloor) return;
+            console.log('Switching floor from', currentFloor, 'to', targetFloor);
+
+            // Get current scene and update tracking first
+            var currentSceneLabel = getCurrentSceneLabel();
+            console.log('Current scene before switch:', currentSceneLabel);
+            
+            if (currentSceneLabel) {
+                var detectedRoom = getRoomKeyFromLabel(currentSceneLabel);
+                var detectedFloor = getFloorFromLabel(currentSceneLabel);
+                console.log('Detected current room:', detectedRoom, 'floor:', detectedFloor);
+                
+                // Update current state
+                currentRoom = detectedRoom || currentRoom;
+                currentFloor = detectedFloor || currentFloor;
+            }
+
+            if (targetFloor === currentFloor) {
+                console.log('Already on target floor');
+                return;
+            }
+
             var targetMap = SCENES[targetFloor];
-            if (!targetMap) return;
-            var targetScene = targetMap[currentRoom] || targetMap.entrance;
+            if (!targetMap) {
+                console.warn('No scenes found for floor:', targetFloor);
+                return;
+            }
+
+            // Find the target scene for the current room
+            var targetScene = targetMap[currentRoom];
+            if (!targetScene) {
+                console.warn('Room', currentRoom, 'not found on floor', targetFloor, ', switching to entrance');
+                targetScene = targetMap.entrance;
+            }
+
+            console.log('Switching to scene:', targetScene, 'on floor:', targetFloor);
+            
+            // Perform the scene change
             setMediaByName(targetScene);
-            setTimeout(updateTracking, 400);
+            
+            // Update state after a delay to ensure the scene has loaded
+            setTimeout(function() {
+                console.log('Post-switch update tracking');
+                updateTracking();
+            }, 400);
         }
 
-        // **FIXED:** The room navigation bar now includes all the new rooms.
+        // **FIXED:** Enhanced room navigation bar with balcony option
         function buildRoomNavBar() {
             var container = document.getElementById('roomNav');
             if (!container) return;
@@ -457,7 +518,10 @@
                 btn.innerHTML = '<i class="fa-solid ' + item.icon + '"></i> ' + item.label;
                 btn.onclick = function () {
                     var scene = (SCENES[currentFloor] || {})[item.key];
-                    if (scene) setMediaByName(scene);
+                    if (scene) {
+                        console.log('Navigating to room:', item.key, 'scene:', scene);
+                        setMediaByName(scene);
+                    }
                 };
                 container.appendChild(btn);
             });
