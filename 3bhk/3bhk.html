@@ -213,6 +213,85 @@
                 transform: rotate(0deg);
             }
         }
+
+        /* --- Updated Mobile Styles --- */
+        
+        /* For screens up to 768px */
+        @media (max-width: 768px) {
+            #floorNav {
+                top: 50%;
+                left: 8px;
+                gap: 8px;
+            }
+
+            #floorNav button {
+                width: 30px; /* Further reduced size */
+                height: 30px;
+                font-size: 0.65rem; /* Further reduced font size */
+            }
+
+            #roomNav {
+                bottom: 8px;
+                gap: 5px;
+                padding: 4px 8px;
+            }
+
+            #roomNav button {
+                padding: 4px 8px;
+                font-size: 8px; /* Further reduced font size */
+                gap: 6px;
+            }
+
+            #topActions {
+                top: 8px;
+                right: 8px;
+                gap: 8px;
+            }
+
+            #topActions button {
+                width: 28px; /* Further reduced size */
+                height: 28px;
+                font-size: 0.8rem; /* Further reduced icon font size */
+            }
+        }
+
+        /* For screens between 769px and 1000px */
+        @media (min-width: 769px) and (max-width: 1000px) {
+            #floorNav {
+                left: 12px;
+                gap: 10px;
+            }
+
+            #floorNav button {
+                width: 38px; /* Further reduced size */
+                height: 38px;
+                font-size: 0.75rem; /* Further reduced font size */
+            }
+
+            #roomNav {
+                bottom: 12px;
+                gap: 6px;
+                padding: 5px 9px;
+            }
+
+            #roomNav button {
+                padding: 5px 9px;
+                font-size: 10px; /* Further reduced font size */
+                gap: 7px;
+            }
+
+            #topActions {
+                top: 12px;
+                right: 12px;
+                gap: 9px;
+            }
+
+            #topActions button {
+                width: 32px; /* Further reduced size */
+                height: 32px;
+                font-size: 0.9rem; /* Further reduced icon font size */
+            }
+        }
     </style>
 
     <script type="text/javascript">
@@ -443,8 +522,8 @@
                                     var expectedScene = SCENES[floor][room];
                                     console.log(`Result for ${room} -> ${floor}:`, 
                                         currentScene === expectedScene ? 'PASSED' : 'FAILED');
-                                    console.log(`  Expected: ${expectedScene}`);
-                                    console.log(`  Got: ${currentScene}`);
+                                    console.log(`  Expected: ${expectedScene}`);
+                                    console.log(`  Got: ${currentScene}`);
                                 }, 1000);
                             }, (floorIndex - 1) * 2000);
                         }
@@ -460,7 +539,7 @@
         Object.keys(SCENES).forEach(function(floor) {
             console.log(floor + ' Floor:');
             Object.keys(SCENES[floor]).forEach(function(room) {
-                console.log('  ' + room + ': ' + SCENES[floor][room]);
+                console.log('  ' + room + ': ' + SCENES[floor][room]);
             });
         });
         console.log('===========================');
@@ -899,8 +978,8 @@
                     // Only update if something actually changed
                     if (roomType !== currentRoom || floorType !== currentFloor) {
                         console.log('Periodic check detected change:');
-                        console.log('  Room:', currentRoom, '->', roomType);
-                        console.log('  Floor:', currentFloor, '->', floorType);
+                        console.log('  Room:', currentRoom, '->', roomType);
+                        console.log('  Floor:', currentFloor, '->', floorType);
                         
                         currentRoom = roomType;
                         currentFloor = floorType;

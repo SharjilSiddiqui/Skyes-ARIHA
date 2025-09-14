@@ -346,148 +346,196 @@
 
         /* Mobile styles */
         @media (max-width: 768px) {
-            /* button { background: red !important; } */
             .logo-left {
-                width: 40px;
+                width: 30px;
             }
 
-            /* UPDATED: Adjusts the mobile position of the Skyes logo */
             .logo-below {
-                width: 40px;
-                top: 20px;
-                right: 20px;
+                width: 30px;
+                top: 15px;
+                right: 15px;
             }
 
             .button-group {
                 top: 50%;
-                right: 5%;
+                right: 3%;
                 transform: translateY(-50%);
                 align-items: flex-end;
+                gap: 10px;
             }
 
             .tour-btn {
-                /* min-width: 120px; */
-                height: 50px;
-                font-size: 1rem;
-                border-radius: 30px;
+                min-width: 70px;
+                height: 30px;
+                font-size: 0.7rem;
+                border-radius: 15px;
+                padding: 0 8px;
+                gap: 4px;
             }
 
             .tour-btn i {
-                font-size: 1.2rem;
+                font-size: 0.8rem;
             }
 
             .utility-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 1.2rem;
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
             }
             
-            /* ADDED: Mobile layout for left buttons */
             .left-button-group {
-                left: 10px;
+                left: 5px;
                 top: unset;
-                bottom: 80px;
+                bottom: 50px;
                 transform: none;
                 flex-direction: row;
-                justify-content: center;
-                gap: 10px;
-                width: calc(100% - 20px);
+                justify-content: flex-start;
+                gap: 5px;
+                width: calc(100% - 10px);
             }
             
             .vr-btn,
             .amenities-btn,
             .floor-plans-btn {
-                width: 40px;
-                height: 80px;
+                min-width: 25px;
+                width: 25px;
+                height: 50px;
+                border-radius: 12px;
+                font-size: 0.6rem;
+                padding: 0 3px;
+                gap: 2px;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
             }
 
-            .vr-btn:hover,
-            .amenities-btn:hover,
-            .floor-plans-btn:hover {
-                transform: scale(1.1);
+            .btn-text {
+                font-size: 0.5rem;
+                text-align: center;
+                line-height: 1;
+                word-break: break-word;
             }
 
             .utility-buttons {
-                bottom: calc(25px + env(safe-area-inset-bottom));
-                right: 15px;
-                gap: 10px;
+                bottom: calc(10px + env(safe-area-inset-bottom));
+                right: 8px;
+                gap: 5px;
             }
             
             .day-night-toggle {
-                bottom: 25px;
-                left: 15px;
+                bottom: 10px;
+                left: 8px;
+            }
+
+            .day-night-toggle label {
+                font-size: 12px;
+            }
+
+            .day-night-toggle input[type="checkbox"] {
+                width: 25px;
+                height: 12px;
+            }
+
+            .day-night-toggle input[type="checkbox"]::before {
+                width: 10px;
+                height: 10px;
+            }
+
+            .day-night-toggle input[type="checkbox"]:checked::before {
+                left: 14px;
             }
         }
 
-        @media (max-width: 1000px) {
-            /* button { background: red !important; } */
+        @media (max-width: 1000px) and (min-width: 769px) {
             .logo-left {
-                width: 60px;
+                width: 35px;
             }
 
-            /* UPDATED: Adjusts the mobile position of the Skyes logo */
             .logo-below {
-                width: 60px;
-                top: 20px;
-                right: 20px;
+                width: 35px;
+                top: 15px;
+                right: 15px;
             }
 
             .button-group {
                 top: 50%;
-                right: 5%;
+                right: 3%;
                 transform: translateY(-50%);
                 align-items: flex-end;
+                gap: 8px;
             }
 
             .tour-btn {
-                width: 30px;
-                height: 42px;
-                font-size: .8rem;
-                /* border-radius: 30px; */
+                min-width: 65px;
+                height: 28px;
+                font-size: 0.7rem;
+                border-radius: 14px;
+                padding: 0 8px;
+                gap: 4px;
             }
 
             .tour-btn i {
-                font-size: 1rem;
+                font-size: 0.8rem;
             }
 
             .utility-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
+                width: 28px;
+                height: 28px;
+                font-size: 0.9rem;
             }
             
-            /* ADDED: Mobile layout for left buttons */
             .left-button-group {
                 top: 50%;
-                left: 10px;
+                left: 8px;
                 transform: translateY(-50%);
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 10px;
+                gap: 6px;
             }
             
             .vr-btn,
             .amenities-btn,
             .floor-plans-btn {
-                width: 50px;
-                height: 43px;
+                min-width: 85px;
+                width: 85px;
+                height: 28px;
+                border-radius: 14px;
+                font-size: 0.7rem;
+                padding: 0 6px;
+                gap: 4px;
             }
 
-            .vr-btn:hover,
-            .amenities-btn:hover,
-            .floor-plans-btn:hover {
-                transform: scale(1.1);
+            .btn-text {
+                font-size: 0.6rem;
             }
 
             .utility-buttons {
-                bottom: calc(25px + env(safe-area-inset-bottom));
-                right: 15px;
-                gap: 10px;
+                bottom: calc(12px + env(safe-area-inset-bottom));
+                right: 8px;
+                gap: 4px;
             }
             
             .day-night-toggle {
-                bottom: 25px;
-                left: 15px;
+                bottom: 12px;
+                left: 8px;
+            }
+
+            .day-night-toggle label {
+                font-size: 12px;
+            }
+
+            .day-night-toggle input[type="checkbox"] {
+                width: 25px;
+                height: 12px;
+            }
+
+            .day-night-toggle input[type="checkbox"]::before {
+                width: 10px;
+                height: 10px;
+            }
+
+            .day-night-toggle input[type="checkbox"]:checked::before {
+                left: 14px;
             }
         }
     </style>

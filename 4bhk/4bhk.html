@@ -926,6 +926,85 @@
                 transform: rotate(0deg);
             }
         }
+        
+        /* --- Updated Mobile Styles --- */
+        
+        /* For screens up to 768px */
+        @media (max-width: 768px) {
+            #floorNav {
+                top: 50%;
+                left: 8px;
+                gap: 8px;
+            }
+
+            #floorNav button {
+                width: 30px;
+                height: 30px;
+                font-size: 0.65rem;
+            }
+
+            #roomNav {
+                bottom: 8px;
+                gap: 5px;
+                padding: 4px 8px;
+            }
+
+            #roomNav button {
+                padding: 4px 8px;
+                font-size: 8px;
+                gap: 6px;
+            }
+
+            #topActions {
+                top: 8px;
+                right: 8px;
+                gap: 8px;
+            }
+
+            #topActions button {
+                width: 28px;
+                height: 28px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* For screens between 769px and 1000px */
+        @media (min-width: 769px) and (max-width: 1000px) {
+            #floorNav {
+                left: 12px;
+                gap: 10px;
+            }
+
+            #floorNav button {
+                width: 38px;
+                height: 38px;
+                font-size: 0.75rem;
+            }
+
+            #roomNav {
+                bottom: 12px;
+                gap: 6px;
+                padding: 5px 9px;
+            }
+
+            #roomNav button {
+                padding: 5px 9px;
+                font-size: 10px;
+                gap: 7px;
+            }
+
+            #topActions {
+                top: 12px;
+                right: 12px;
+                gap: 9px;
+            }
+
+            #topActions button {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 
 </head>
@@ -935,7 +1014,6 @@
         <source src="/assets/audio/audio.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
-    <!-- Orientation overlay -->
     <div id="rotateOverlay">
         <i class="fa-solid fa-mobile-screen-button"></i>
         <p>Please rotate your device<br>for the best experience</p>
@@ -970,7 +1048,6 @@
 
     <div id="roomNav"></div>
 
-    <!-- <div id="currentRoomInfo"></div> -->
-</body>
+    </body>
 
 </html>
