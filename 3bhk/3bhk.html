@@ -302,23 +302,23 @@
 
     // The scenes object remains the same as provided.
     var SCENES = {
+        // '17th': {
+        //     entrance: '3bhk 02 entrance 17th floor',
+        //     hall: '3bhk 01 hall 17th floor',
+        //     passage: '3bhk Passage 17th floor',
+        //     kitchen: '3bhk kitchen',
+        //     bedroom01_1: '3bhk bedroom02 17th',
+        //     bedroom01_2: '3bhk bedroom01 17th',
+        //     bedroom02_1: '3bhk bedroom02 2 17th',
+        //     bedroom02_2: '3bhk bedroom02 1 17th',
+        //     bedroom03_1: '3bhk bedroom03 01 17th',
+        //     bedroom03_2: '3bhk bedroom03 02 17th',
+        //     balcony: '3BHK_Bolcony_17',
+        //     bedroom1_toilet: '3bhk_bedroom01_toilet copy',
+        //     bedroom2_toilet: '3bhk_bed2_toilet copy',
+        //     bedroom3_toilet: '3bhk_BDRoom03_toilet copy',
+        // },
         '17th': {
-            entrance: '3bhk 02 entrance 17th floor',
-            hall: '3bhk 01 hall 17th floor',
-            passage: '3bhk Passage 17th floor',
-            kitchen: '3bhk kitchen',
-            bedroom01_1: '3bhk bedroom02 17th',
-            bedroom01_2: '3bhk bedroom01 17th',
-            bedroom02_1: '3bhk bedroom02 2 17th',
-            bedroom02_2: '3bhk bedroom02 1 17th',
-            bedroom03_1: '3bhk bedroom03 01 17th',
-            bedroom03_2: '3bhk bedroom03 02 17th',
-            balcony: '3BHK_Bolcony_17',
-            bedroom1_toilet: '3bhk_bedroom01_toilet copy',
-            bedroom2_toilet: '3bhk_bed2_toilet copy',
-            bedroom3_toilet: '3bhk_BDRoom03_toilet copy',
-        },
-        '23rd': {
             entrance: '3bhk 02 entrance 23rd floor',
             hall: '3bhk 01 hall 23rd floor',
             passage: '3bhk Passage 23rd floor',
@@ -334,7 +334,23 @@
             bedroom2_toilet: '3bhk_bed2_toilet copy',
             bedroom3_toilet: '3bhk_BDRoom03_toilet copy',
         },
-        '28th': {
+        // '23rd': {
+        //     entrance: '3bhk 02 entrance 23rd floor',
+        //     hall: '3bhk 01 hall 23rd floor',
+        //     passage: '3bhk Passage 23rd floor',
+        //     kitchen: '3bhk kitchen',
+        //     bedroom01_1: '3bhk bedroom02 23rd',
+        //     bedroom01_2: '3bhk bedroom01 23rd',
+        //     bedroom02_1: '3bhk bedroom02 2 23rd',
+        //     bedroom02_2: '3bhk bedroom02 1 23rd',
+        //     bedroom03_1: '3bhk bedroom03 01 23rd',
+        //     bedroom03_2: '3bhk bedroom03 02 23rd',
+        //     balcony: '3BHK_Bolcony_23',
+        //     bedroom1_toilet: '3bhk_bedroom01_toilet copy',
+        //     bedroom2_toilet: '3bhk_bed2_toilet copy',
+        //     bedroom3_toilet: '3bhk_BDRoom03_toilet copy',
+        // },
+        '25th': {
             entrance: '3bhk 02 entrance 28th floor',
             hall: '3bhk 01 hall 28th floor',
             passage: '3bhk Passage 28th floor',
@@ -483,17 +499,17 @@
         setCurrentSceneState('17th', 'bedroom01');
         
         setTimeout(function() {
-            // Test 2: Switch to 28th floor
-            console.log('Test 2: Switching to 28th floor');
-            switchFloor('28th');
+            // Test 2: Switch to 25th floor
+            console.log('Test 2: Switching to 25th floor');
+            switchFloor('25th');
             
             setTimeout(function() {
-                // Test 3: Check if we're in bedroom01 on 28th floor
-                console.log('Test 3: Verifying we are in bedroom01 on 28th floor');
+                // Test 3: Check if we're in bedroom01 on 25th floor
+                console.log('Test 3: Verifying we are in bedroom01 on 25th floor');
                 var currentScene = getCurrentSceneName();
                 console.log('Current scene:', currentScene);
-                console.log('Expected scene:', SCENES['28th']['bedroom01']);
-                console.log('Test result:', currentScene === SCENES['28th']['bedroom01'] ? 'PASSED' : 'FAILED');
+                console.log('Expected scene:', SCENES['25th']['bedroom01']);
+                console.log('Test result:', currentScene === SCENES['25th']['bedroom01'] ? 'PASSED' : 'FAILED');
             }, 1000);
         }, 1000);
     }
@@ -644,7 +660,7 @@
                 case '3':
                     if (e.ctrlKey || e.metaKey) {
                         e.preventDefault();
-                        switchFloor('28th');
+                        switchFloor('25th');
                     }
                     break;
                 case '4':
@@ -855,7 +871,7 @@
         
         // Check for floor indicators in the scene name
         if (s.includes('33rd')) return '33rd';
-        if (s.includes('28th')) return '28th';
+        if (s.includes('25th')) return '25th';
         if (s.includes('23rd')) return '23rd';
         if (s.includes('17th')) return '17th';
         
@@ -1456,8 +1472,8 @@
 
     <div id="floorNav">
         <button data-floor="17th" onclick="switchFloor('17th')">17F</button>
-        <button data-floor="23rd" onclick="switchFloor('23rd')">23F</button>
-        <button data-floor="28th" onclick="switchFloor('28th')">28F</button>
+        <!-- <button data-floor="23rd" onclick="switchFloor('23rd')">23F</button> -->
+        <button data-floor="25th" onclick="switchFloor('25th')">25F</button>
         <button data-floor="33rd" onclick="switchFloor('33rd')">33F</button>
     </div>
 

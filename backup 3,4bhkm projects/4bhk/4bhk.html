@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>4 Bhk</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="manifest" href="/assets/site.webmanifest">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, width=device-width, viewport-fit=cover, maximum-scale=1.0" />
+    <link rel="preload" href="script.js?v=1755693582282" as="script" />
+    <link rel="preload" href="media/panorama_CC48A826_C71D_4951_41E7_7F28A52014B9_0/l/2/0_0.jpg?v=1755693582282"
+        as="image" />
+    <link rel="preload" href="media/panorama_CC48A826_C71D_4951_41E7_7F28A52014B9_0/r/2/0_0.jpg?v=1755693582282"
+        as="image" />
+    <link rel="preload" href="media/panorama_CC48A826_C71D_4951_41E7_7F28A52014B9_0/u/2/0_0.jpg?v=1755693582282"
+        as="image" />
+    <link rel="preload" href="media/panorama_CC48A826_C71D_4951_41E7_7F28A52014B9_0/d/2/0_0.jpg?v=1755693582282"
+        as="image" />
+    <link rel="preload" href="media/panorama_CC48A826_C71D_4951_41E7_7F28A52014B9_0/f/2/0_0.jpg?v=1755693582282"
+        as="image" />
+    <link rel="preload" href="media/panorama_CC48A826_C71D_4951_41E7_7F28A52014B9_0/b/2/0_0.jpg?v=1755693582282"
+        as="image" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.0/css/all.css">
+
+    <script>(function (i, s, o, g, r, a, m) { i["GoogleAnalyticsObject"] = r; i[r] = i[r] || function () { (i[r].q = i[r].q || []).push(arguments) }, i[r].l = 1 * new Date(); a = s.createElement(o), m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m) })(window, document, "script", "//www.google-analytics.com/analytics.js", "ga"); ga("create", "UA-116087-3", "auto"); ga("send", "pageview");</script>
+    <meta name="description" content="Virtual Tour" />
+    <meta name="theme-color" content="#FFFFFF" />
+    <script src="lib/tdvplayer.js?v=1755693582282"></script>
+    <script type="text/javascript">
+        var player;
+        var playersPlayingTmp = [];
+        var isInitialized = false;
+        var isPaused = false;
+        var SCENES = {
+            '17th': {
+                entrance: '4bhk living 01 17th',
+                hall: '4bhk living 02 17th',
+                kitchen: '4bhk kitchen',
+                bedroom01_1: '4BHK BEDROOM 01 2 17th',
+                bedroom01_2: '4BHK BEDROOM 01 1 17th',
+                bedroom02_1: '4BHK BEDROOM 02 2 17th',
+                bedroom02_2: '4BHK BEDROOM 02 1 17th',
+                bedroom03_1: '4BHK BEDROOM 03 2 17th',
+                bedroom03_2: '4BHK BEDROOM 03 1 17th',
+                bedroom04_1: '4BHK BEDROOM 04 1 17th',
+                bedroom04_2: '4BHK BEDROOM 04 2 17th',
+                bedroom05_1: '4BHK BEDROOM 05 1 17th',
+                balcony: '4bhk_bolcony_17',
+                bedroom1_toilet: '4bhk_bedroom_02 copy',
+                bedroom2_toilet: '4BHK_Bedroom01_ copy',
+                bedroom3_toilet: '4_BHK_BEDROOM_4_TOILET copy',
+                bedroom4_toilet: '4bhk_Bedroom_003 copy',
+            },
+            '23rd': {
+                entrance: '4bhk living 01 23rd',
+                hall: '4bhk living 02 23rd',
+                kitchen: '4bhk kitchen',
+                bedroom01_1: '4BHK BEDROOM 01 2 23rd',
+                bedroom01_2: '4BHK BEDROOM 01 1 23rd',
+                bedroom02_1: '4BHK BEDROOM 02 2 23rd',
+                bedroom02_2: '4BHK BEDROOM 02 1 23rd',
+                bedroom03_1: '4BHK BEDROOM 03 2 23rd',
+                bedroom03_2: '4BHK BEDROOM 03 1 23rd',
+                bedroom04_1: '4BHK BEDROOM 04 1 23rd',
+                bedroom04_2: '4BHK BEDROOM 04 2 23rd',
+                balcony: '4bhk_bolcony_23',
+                bedroom1_toilet: '4bhk_bedroom_02 copy',
+                bedroom2_toilet: '4BHK_Bedroom01_ copy',
+                bedroom3_toilet: '4_BHK_BEDROOM_4_TOILET copy',
+                bedroom4_toilet: '4bhk_Bedroom_003 copy',
+            },
+            '28th': {
+                entrance: '4bhk living 01 28th',
+                hall: '4bhk living 02 28th',
+                kitchen: '4bhk kitchen',
+                bedroom01_1: '4BHK BEDROOM 01 2 28th',
+                bedroom01_2: '4BHK BEDROOM 01 1 28th',
+                bedroom02_1: '4BHK BEDROOM 02 2 28th',
+                bedroom02_2: '4BHK BEDROOM 02 1 28th',
+                bedroom03_1: '4BHK BEDROOM 03 2 28th',
+                bedroom03_2: '4BHK BEDROOM 03 1 28th',
+                bedroom04_1: '4BHK BEDROOM 04 1 28th',
+                bedroom04_2: '4BHK BEDROOM 04 2 28th',
+                balcony: '4bhk_bolcony_28',
+                bedroom1_toilet: '4bhk_bedroom_02 copy',
+                bedroom2_toilet: '4BHK_Bedroom01_ copy',
+                bedroom3_toilet: '4_BHK_BEDROOM_4_TOILET copy',
+                bedroom4_toilet: '4bhk_Bedroom_003 copy',
+            },
+            '33rd': {
+                entrance: '4bhk living 01 33rd',
+                hall: '4bhk living 02 33rd',
+                kitchen: '4bhk kitchen',
+                bedroom01_1: '4BHK BEDROOM 01 2 33rd',
+                bedroom01_2: '4BHK BEDROOM 01 1 33rd',
+                bedroom02_1: '4BHK BEDROOM 02 2 33rd',
+                bedroom02_2: '4BHK BEDROOM 02 1 33rd',
+                bedroom03_1: '4BHK BEDROOM 03 2 33rd',
+                bedroom03_2: '4BHK BEDROOM 03 1 33rd',
+                bedroom04_1: '4BHK BEDROOM 04 1 33rd',
+                bedroom04_2: '4BHK BEDROOM 04 2 33rd',
+                balcony: '4bhk_bolcony_33',
+                bedroom1_toilet: '4bhk_bedroom_02 copy',
+                bedroom2_toilet: '4BHK_Bedroom01_ copy',
+                bedroom3_toilet: '4_BHK_BEDROOM_4_TOILET copy',
+                bedroom4_toilet: '4bhk_Bedroom_003 copy',
+            }
+        };
+        var currentFloor = '17th';
+        var currentRoom = '';
+
+        function loadTour() {
+            if (player)
+                return;
+
+            var beginFunc = function (event) {
+                if (event.name == 'begin') {
+                    var camera = event.data.source.get('camera');
+                    if (camera && camera.get('initialSequence') && camera.get('initialSequence').get('movements').length > 0)
+                        return;
+                }
+
+                if (event.sourceClassName == "MediaAudio")
+                    return;
+
+                isInitialized = true;
+
+                player.unbind('preloadMediaShow', beginFunc, player, true);
+                player.unbindOnObjectsOf('PanoramaPlayListItem', 'begin', beginFunc, player, true);
+                player.unbind('stateChange', beginFunc, player, true);
+                window.parent.postMessage("tourLoaded", '*');
+
+                disposePreloader();
+
+                onVirtualTourLoaded();
+            };
+
+            var settings = new TDV.PlayerSettings();
+
+            settings.set(TDV.PlayerSettings.CONTAINER, document.getElementById('viewer'));
+            settings.set(TDV.PlayerSettings.SCRIPT_URL, 'script.js?v=1755693582282');
+            settings.set(TDV.PlayerSettings.WEBVR_POLYFILL_URL, 'lib/WebVRPolyfill.js?v=1755693582282');
+            settings.set(TDV.PlayerSettings.HLS_URL, 'lib/Hls.js?v=1755693582282');
+            settings.set(TDV.PlayerSettings.QUERY_STRING_PARAMETERS, 'v=1755693582282');
+            window.tdvplayer = player = TDV.PlayerAPI.create(settings);
+            player.bind('preloadMediaShow', beginFunc, player, true);
+            player.bind('stateChange', beginFunc, player, true);
+            player.bindOnObjectsOf('PanoramaPlayListItem', 'begin', beginFunc, player, true);
+            player.bindOnObject('rootPlayer', 'start', function (e) {
+                var queryDict = {};
+                location.search.substr(1).split("&").forEach(function (item) {
+                    var k = item.split("=")[0], v = decodeURIComponent(item.split("=")[1]);
+                    queryDict[k] = v
+                });
+                var item = undefined;
+                if ("media-index" in queryDict) {
+                    item = setMediaByIndex(parseInt(queryDict["media-index"]) - 1);
+                } else if ("media-name" in queryDict) {
+                    item = setMediaByName(queryDict["media-name"]);
+                } else {
+                    // Load 17th floor entrance by default
+                    item = setMediaByName(SCENES['17th'].entrance);
+                }
+                if (item != undefined && "trigger-overlay-name" in queryDict) {
+                    triggerOverlayByName(item, queryDict["trigger-overlay-name"], "trigger-overlay-event" in queryDict ? queryDict["trigger-overlay-event"] : "click");
+                }
+
+                player.getById('rootPlayer').bind('tourEnded', function () {
+                    onVirtualTourEnded();
+                }, player, true);
+            }, player, false);
+
+            /* Listen messages */
+            window.addEventListener('message', function (e) {
+                //Listen to messages for make actions to player in the format function:param1,param2
+                var action = e.data;
+                if (action == 'pauseTour' || action == 'resumeTour') {
+                    this[action].apply(this);
+                }
+            });
+        }
+
+        function pauseTour() {
+            isPaused = true;
+            if (!isInitialized)
+                return;
+
+            var playLists = player.getByClassName('PlayList');
+            for (var i = 0, count = playLists.length; i < count; i++) {
+                var playList = playLists[i];
+                var index = playList.get('selectedIndex');
+                if (index != -1) {
+                    var item = playList.get('items')[index];
+                    var itemPlayer = item.get('player');
+                    if (itemPlayer && itemPlayer.pause) {
+                        playersPlayingTmp.push(itemPlayer);
+                        itemPlayer.pause();
+                    }
+                }
+            }
+
+            player.getById('pauseGlobalAudios')();
+        }
+
+        function resumeTour() {
+            isPaused = false;
+            if (!isInitialized)
+                return;
+
+            while (playersPlayingTmp.length) {
+                var viewer = playersPlayingTmp.pop();
+                viewer.play();
+            }
+
+            player.getById('resumeGlobalAudios')();
+        }
+
+        function onVirtualTourLoaded() {
+            if (isPaused)
+                pauseTour();
+            setTimeout(function () {
+                setupScenePersistence();
+                buildRoomNavBar();
+                highlightActiveFloorButton(currentFloor);
+            }, 1000);
+        }
+
+        function onVirtualTourEnded() {
+
+        }
+
+        function getRootPlayer() {
+            return window.tdvplayer !== undefined ? window.tdvplayer.getById('rootPlayer') : undefined;
+        }
+
+        function setMediaByIndex(index) {
+            var rootPlayer = getRootPlayer();
+            if (rootPlayer !== undefined) {
+                return rootPlayer.setMainMediaByIndex(index);
+            }
+        }
+
+        function setMediaByName(name) {
+            var rootPlayer = getRootPlayer();
+            if (rootPlayer !== undefined) {
+                return rootPlayer.setMainMediaByName(name);
+            }
+        }
+
+        function triggerOverlayByName(item, name, eventName) {
+            var rootPlayer = getRootPlayer();
+            if (rootPlayer !== undefined) {
+                item.bind('begin', function (e) {
+                    item.unbind('begin', arguments.callee, this);
+                    var overlay = rootPlayer.getPanoramaOverlayByName(item.get('media'), name);
+                    if (overlay)
+                        rootPlayer.triggerOverlay(overlay, eventName);
+                }, rootPlayer);
+            }
+        }
+
+        // ---------- 4BHK SCENE PERSISTENCE ----------
+        function getCurrentSceneLabel() {
+            try {
+                var root = getRootPlayer();
+                var media = root && root.get('currentMedia');
+                var label = media && media.get ? media.get('label') : undefined;
+                if (label && label !== 'begin' && label !== 'undefined' && label !== '') return label;
+                var lists = player.getByClassName('PlayList');
+                if (lists && lists.length) {
+                    var idx = lists[0].get('selectedIndex');
+                    if (idx !== -1) {
+                        var item = lists[0].get('items')[idx];
+                        var m = item && item.get('media');
+                        var l2 = m && m.get('label');
+                        if (l2) return l2;
+                    }
+                }
+            } catch (e) {
+                console.warn('getCurrentSceneLabel error', e);
+            }
+            return null;
+        }
+
+        // **FIXED:** Improved room detection logic with proper balcony matching
+        function getRoomKeyFromLabel(label) {
+            if (!label) return null;
+            var lower = String(label).toLowerCase().replace(/\s+/g, ' ').trim();
+
+            console.log('Detecting room for label:', label, 'normalized:', lower);
+
+            // First, try to find an exact match from the SCENES object
+            for (var f in SCENES) {
+                var rooms = SCENES[f];
+                for (var r in rooms) {
+                    var sceneName = String(rooms[r]).toLowerCase().replace(/\s+/g, ' ').trim();
+                    if (sceneName === lower) {
+                        console.log('Exact match found:', r, 'for scene:', rooms[r]);
+                        return r;
+                    }
+                }
+            }
+
+            // **FIXED:** Improved pattern matching with better balcony detection
+            // Balcony detection - check for various balcony spelling variations
+            if (lower.includes('bolcony') || lower.includes('balcony')) {
+                console.log('Balcony detected');
+                return 'balcony';
+            }
+
+            // Living room patterns
+            if (lower.includes('living 01') || lower.includes('living01')) return 'entrance';
+            if (lower.includes('living 02') || lower.includes('living02')) return 'hall';
+            
+            // Kitchen
+            if (lower.includes('kitchen')) return 'kitchen';
+            
+            // Bedroom patterns - more specific matching
+            if (lower.includes('bedroom 01 2') || lower.includes('bedroom01 2')) return 'bedroom01_1';
+            if (lower.includes('bedroom 01 1') || lower.includes('bedroom01 1')) return 'bedroom01_2';
+            if (lower.includes('bedroom 02 2') || lower.includes('bedroom02 2')) return 'bedroom02_1';
+            if (lower.includes('bedroom 02 1') || lower.includes('bedroom02 1')) return 'bedroom02_2';
+            if (lower.includes('bedroom 03 2') || lower.includes('bedroom03 2')) return 'bedroom03_1';
+            if (lower.includes('bedroom 03 1') || lower.includes('bedroom03 1')) return 'bedroom03_2';
+            if (lower.includes('bedroom 04 1') || lower.includes('bedroom04 1')) return 'bedroom04_1';
+            if (lower.includes('bedroom 04 2') || lower.includes('bedroom04 2')) return 'bedroom04_2';
+            if (lower.includes('bedroom 05 1') || lower.includes('bedroom05 1')) return 'bedroom05_1';
+
+            // Toilet patterns
+            if (lower.includes('bedroom_02 copy')) return 'bedroom1_toilet';
+            if (lower.includes('bedroom01_ copy')) return 'bedroom2_toilet';
+            if (lower.includes('bedroom_4_toilet copy')) return 'bedroom3_toilet';
+            if (lower.includes('bedroom_003 copy')) return 'bedroom4_toilet';
+
+            console.log('No specific match found, defaulting to entrance');
+            return 'entrance';
+        }
+
+        function getFloorFromLabel(label) {
+            var lower = String(label || '').toLowerCase();
+            if (lower.includes('33rd') || lower.includes('33')) return '33rd';
+            if (lower.includes('28th') || lower.includes('28')) return '28th';
+            if (lower.includes('23rd') || lower.includes('23')) return '23rd';
+            if (lower.includes('17th') || lower.includes('17')) return '17th';
+            return currentFloor;
+        }
+
+        function highlightActiveFloorButton(activeFloor) {
+            var btns = document.querySelectorAll('#floorNav button[data-floor]');
+            btns.forEach(function (b) {
+                b.classList.toggle('active', b.getAttribute('data-floor') === activeFloor);
+            });
+        }
+
+        function setupScenePersistence() {
+            // scene listeners
+            player.bindOnObjectsOf('PanoramaPlayListItem', 'begin', function () {
+                setTimeout(updateTracking, 100);
+            }, player, true);
+            player.bind('stateChange', function (e) {
+                if (e.name === 'mediaChanged') setTimeout(updateTracking, 180);
+            }, player, true);
+            if (!loadSceneState()) updateTracking();
+        }
+
+        function updateTracking() {
+            var label = getCurrentSceneLabel();
+            if (!label) return;
+            
+            console.log('Updating tracking for scene:', label);
+            
+            var room = getRoomKeyFromLabel(label);
+            var floor = getFloorFromLabel(label);
+            
+            console.log('Detected room:', room, 'floor:', floor);
+            
+            currentRoom = room;
+            if (floor !== currentFloor) {
+                currentFloor = floor;
+                highlightActiveFloorButton(currentFloor);
+            }
+            saveSceneState();
+            updateCurrentRoomIndicator();
+        }
+
+        function saveSceneState() {
+            try {
+                var state = {
+                    floor: currentFloor,
+                    room: currentRoom,
+                    t: Date.now()
+                };
+                console.log('Saving state:', state);
+                localStorage.setItem('sceneState4BHK', JSON.stringify(state));
+            } catch (e) {
+                console.warn('Error saving state:', e);
+            }
+        }
+
+        function loadSceneState() {
+            try {
+                var raw = localStorage.getItem('sceneState4BHK');
+                if (!raw) return false;
+                var s = JSON.parse(raw);
+                if (!s) return false;
+                currentFloor = s.floor || currentFloor;
+                currentRoom = s.room || currentRoom;
+                console.log('Loaded state:', s);
+                return true;
+            } catch (e) {
+                console.warn('Error loading state:', e);
+                return false;
+            }
+        }
+
+        // **FIXED:** Enhanced `switchFloor` with better debugging and fallback logic
+        function switchFloor(targetFloor) {
+            if (!isInitialized || !player) {
+                console.warn('Player not initialized, cannot switch floor');
+                return;
+            }
+
+            console.log('Switching floor from', currentFloor, 'to', targetFloor);
+
+            // Get current scene and update tracking first
+            var currentSceneLabel = getCurrentSceneLabel();
+            console.log('Current scene before switch:', currentSceneLabel);
+            
+            if (currentSceneLabel) {
+                var detectedRoom = getRoomKeyFromLabel(currentSceneLabel);
+                var detectedFloor = getFloorFromLabel(currentSceneLabel);
+                console.log('Detected current room:', detectedRoom, 'floor:', detectedFloor);
+                
+                // Update current state
+                currentRoom = detectedRoom || currentRoom;
+                currentFloor = detectedFloor || currentFloor;
+            }
+
+            if (targetFloor === currentFloor) {
+                console.log('Already on target floor');
+                return;
+            }
+
+            var targetMap = SCENES[targetFloor];
+            if (!targetMap) {
+                console.warn('No scenes found for floor:', targetFloor);
+                return;
+            }
+
+            // Find the target scene for the current room
+            var targetScene = targetMap[currentRoom];
+            if (!targetScene) {
+                console.warn('Room', currentRoom, 'not found on floor', targetFloor, ', switching to entrance');
+                targetScene = targetMap.entrance;
+            }
+
+            console.log('Switching to scene:', targetScene, 'on floor:', targetFloor);
+            
+            // Perform the scene change
+            setMediaByName(targetScene);
+            
+            // Update state after a delay to ensure the scene has loaded
+            setTimeout(function() {
+                console.log('Post-switch update tracking');
+                updateTracking();
+            }, 400);
+        }
+
+        // **FIXED:** Enhanced room navigation bar with balcony option
+        function buildRoomNavBar() {
+            var container = document.getElementById('roomNav');
+            if (!container) return;
+            container.innerHTML = '';
+            var entries = [
+                {
+                    key: 'entrance',
+                    label: 'Entrance',
+                    icon: 'fa-person-booth'
+                },
+                {
+                    key: 'hall',
+                    label: 'Living Room',
+                    icon: 'fa-couch'
+                },
+                {
+                    key: 'kitchen',
+                    label: 'Kitchen',
+                    icon: 'fa-kitchen-set'
+                },
+                {
+                    key: 'bedroom01_1',
+                    label: 'Bedroom 1',
+                    icon: 'fa-bed'
+                },
+                {
+                    key: 'bedroom02_1',
+                    label: 'Bedroom 2',
+                    icon: 'fa-bed'
+                },
+                {
+                    key: 'bedroom03_1',
+                    label: 'Bedroom 3',
+                    icon: 'fa-bed'
+                },
+                {
+                    key: 'bedroom04_1',
+                    label: 'Bedroom 4',
+                    icon: 'fa-bed'
+                },
+            ];
+            var floorMap = SCENES[currentFloor] || {};
+            entries.forEach(function (item) {
+                if (!floorMap[item.key]) return;
+                var btn = document.createElement('button');
+                btn.setAttribute('data-room', item.key);
+                btn.innerHTML = '<i class="fa-solid ' + item.icon + '"></i> ' + item.label;
+                btn.onclick = function () {
+                    var scene = (SCENES[currentFloor] || {})[item.key];
+                    if (scene) {
+                        console.log('Navigating to room:', item.key, 'scene:', scene);
+                        setMediaByName(scene);
+                    }
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function updateCurrentRoomIndicator() {
+            var el = document.getElementById('currentRoomInfo');
+            if (!el) return;
+            el.textContent = currentFloor + ' Floor - ' + (currentRoom || '');
+            el.classList.add('show');
+            setTimeout(function () {
+                el.classList.remove('show');
+            }, 2500);
+        }
+
+        // Top-right actions
+        var audioMuted = false;
+
+        function goHome() {
+            window.location.href = '../../index.html';
+        }
+
+        function toggleFullscreen() {
+            var el = document.documentElement;
+            if (!document.fullscreenElement) {
+                if (el.requestFullscreen) el.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        }
+
+        function toggleAudio() {
+            audioMuted = !audioMuted;
+            var btn = document.getElementById('audioBtn');
+            if (audioMuted) {
+                player.getById('pauseGlobalAudios')();
+                if (btn) btn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+            } else {
+                player.getById('resumeGlobalAudios')();
+                if (btn) btn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+            }
+        }
+
+        function showPreloader() {
+            var preloadContainer = document.getElementById('preloadContainer');
+            if (preloadContainer != undefined)
+                preloadContainer.style.opacity = 1;
+        }
+
+        function disposePreloader() {
+            var preloadContainer = document.getElementById('preloadContainer');
+            if (preloadContainer == undefined)
+                return;
+
+            var transitionEndName = transitionEndEventName();
+            if (transitionEndName) {
+                preloadContainer.addEventListener(transitionEndName, hide, false);
+                preloadContainer.style.opacity = 0;
+                setTimeout(hide, 500); //Force hide. Some cases the transitionend event isn't dispatched with an iFrame.
+            } else {
+                hide();
+            }
+
+            function hide() {
+
+                preloadContainer.style.visibility = 'hidden';
+                preloadContainer.style.display = 'none';
+            }
+
+            function transitionEndEventName() {
+                var el = document.createElement('div');
+                var transitions = {
+                    'transition': 'transitionend',
+                    'OTransition': 'otransitionend',
+                    'MozTransition': 'transitionend',
+                    'WebkitTransition': 'webkitTransitionEnd'
+                };
+
+                var t;
+                for (t in transitions) {
+                    if (el.style[t] !== undefined) {
+                        return transitions[t];
+                    }
+                }
+
+                return undefined;
+            }
+        }
+
+        function onBodyClick() {
+            document.body.removeEventListener("click", onBodyClick);
+            document.body.removeEventListener("touchend", onBodyClick);
+            loadTour();
+        }
+
+        function onLoad() {
+            if (/AppleWebKit/.test(navigator.userAgent) && /Mobile\/\w+/.test(navigator.userAgent)) {
+                var inIFrame = false;
+                try {
+                    inIFrame = (window.self !== window.top);
+                } catch (e) {
+                    inIFrame = true;
+                }
+                if (!inIFrame) {
+                    var onResize = function (async) {
+                        [0, 250, 1000, 2000].forEach(function (delay) {
+                            setTimeout(function () {
+                                var viewer = document.querySelector('#viewer');
+                                var scale = window.innerWidth / document.documentElement.clientWidth;
+                                var width = document.documentElement.clientWidth;
+                                var height = Math.round(window.innerHeight / scale);
+                                viewer.style.width = width + 'px';
+                                viewer.style.height = height + 'px';
+                                viewer.style.left = Math.round((window.innerWidth - width) * 0.5) + 'px';
+                                viewer.style.top = Math.round((window.innerHeight - height) * 0.5) + 'px';
+                                viewer.style.transform = 'scale(' + scale + ', ' + scale + ')';
+                                window.scrollTo(0, 0);
+                            }, delay);
+                        });
+                    };
+                    window.addEventListener('resize', onResize);
+                    onResize();
+                }
+            }
+
+
+            if (isOVRWeb()) {
+                showPreloader();
+                loadTour();
+                return;
+            }
+
+            showPreloader();
+            loadTour()
+        }
+
+        function playVideo(video) {
+            function isSafariDesktopV11orGreater() {
+                return /^((?!chrome|android|crios|ipad|iphone).)*safari/i.test(navigator.userAgent) && parseFloat(/Version\/([0-9]+\.[0-9]+)/i.exec(navigator.userAgent)[1]) >= 11;
+            }
+
+            function detectUserAction() {
+                var onVideoClick = function (e) {
+                    if (video.paused) {
+                        video.play();
+                    }
+                    video.muted = false;
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                    video.removeEventListener('click', onVideoClick);
+                    video.removeEventListener('touchend', onVideoClick);
+                };
+                video.addEventListener("click", onVideoClick);
+                video.addEventListener("touchend", onVideoClick);
+            }
+
+            if (isSafariDesktopV11orGreater()) {
+                video.muted = true;
+                video.play();
+            } else {
+                var canPlay = true;
+                var promise = video.play();
+                if (promise) {
+                    promise.catch(function () {
+                        video.muted = true;
+                        video.play();
+                        detectUserAction();
+                    });
+                } else {
+                    canPlay = false;
+                }
+
+                if (!canPlay || video.muted) {
+                    detectUserAction();
+                }
+            }
+        }
+
+        function isOVRWeb() {
+            return window.location.hash.substring(1).split('&').indexOf('ovrweb') > -1;
+        }
+
+        function toggleAudio() {
+            const audio = document.getElementById("background-audio");
+            const audioBtn = document.getElementById("audioBtn");
+
+            if (audio.muted) {
+                audio.muted = false;
+                audio.play();
+                audioBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+            } else {
+                audio.muted = true;
+                audio.pause();
+                audioBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+            }
+        }
+
+        // Orientation check
+        function checkOrientation() {
+            const overlay = document.getElementById("rotateOverlay");
+            if (window.innerHeight > window.innerWidth && /Mobi|Android/i.test(navigator.userAgent)) {
+                overlay.style.display = "flex";
+            } else {
+                overlay.style.display = "none";
+            }
+        }
+
+        window.addEventListener("resize", checkOrientation);
+        window.addEventListener("orientationchange", checkOrientation);
+        window.addEventListener("load", checkOrientation);
+    </script>
+    <style type="text/css">
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        #viewer {
+            background-color: #FFFFFF;
+            z-index: 1;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+        }
+
+        #preloadContainer {
+            z-index: 2;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.5s;
+            -webkit-transition: opacity 0.5s;
+            -moz-transition: opacity 0.5s;
+            -o-transition: opacity 0.5s;
+        }
+
+        /* Floor buttons - vertical left */
+        #floorNav {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+            background-color: transparent;
+        }
+
+        #floorNav button {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            background: #8a1a52;
+            color: #fff;
+            font-weight: 700;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+            transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        #floorNav button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        #floorNav button.active {
+            background: #a11f60;
+        }
+
+        #floorNav button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Bottom room bar */
+        #roomNav {
+            position: absolute;
+            left: 50%;
+            bottom: 16px;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 8px;
+            /* background: rgba(255, 255, 255, 0.9); */
+            padding: 8px 12px;
+            border-radius: 16px;
+            /* box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15); */
+        }
+
+        #roomNav button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            background: #8a1a52;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s ease;
+        }
+
+        #roomNav button:hover {
+            background: #a11f60;
+        }
+
+        /* Top-right actions */
+        #topActions {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        #topActions button {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: #8a1a52;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+            transition: transform 0.15s ease, background 0.2s ease;
+        }
+
+        #topActions button:hover {
+            transform: translateY(-1px);
+            background: #a11f60;
+        }
+
+        /* Current room indicator */
+        #currentRoomInfo {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        #currentRoomInfo.show {
+            opacity: 1;
+        }
+
+        #rotateOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 1.5rem;
+            z-index: 999999;
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        #rotateOverlay i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            animation: rotatePhone 2s infinite ease-in-out;
+        }
+
+        @keyframes rotatePhone {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(90deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+        
+        /* --- Updated Mobile Styles --- */
+        
+        /* For screens up to 768px */
+        @media (max-width: 768px) {
+            #floorNav {
+                top: 50%;
+                left: 8px;
+                gap: 8px;
+            }
+
+            #floorNav button {
+                width: 30px;
+                height: 30px;
+                font-size: 0.65rem;
+            }
+
+            #roomNav {
+                bottom: 8px;
+                gap: 5px;
+                padding: 4px 8px;
+            }
+
+            #roomNav button {
+                padding: 4px 8px;
+                font-size: 8px;
+                gap: 6px;
+            }
+
+            #topActions {
+                top: 8px;
+                right: 8px;
+                gap: 8px;
+            }
+
+            #topActions button {
+                width: 28px;
+                height: 28px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* For screens between 769px and 1000px */
+        @media (min-width: 769px) and (max-width: 1000px) {
+            #floorNav {
+                left: 12px;
+                gap: 10px;
+            }
+
+            #floorNav button {
+                width: 38px;
+                height: 38px;
+                font-size: 0.75rem;
+            }
+
+            #roomNav {
+                bottom: 12px;
+                gap: 6px;
+                padding: 5px 9px;
+            }
+
+            #roomNav button {
+                padding: 5px 9px;
+                font-size: 10px;
+                gap: 7px;
+            }
+
+            #topActions {
+                top: 12px;
+                right: 12px;
+                gap: 9px;
+            }
+
+            #topActions button {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+
+</head>
+
+<body onload="onLoad()">
+    <audio id="background-audio" loop muted>
+        <source src="/assets/audio/audio.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <div id="rotateOverlay">
+        <i class="fa-solid fa-mobile-screen-button"></i>
+        <p>Please rotate your device<br>for the best experience</p>
+    </div>
+    <div id="preloadContainer" style="background-color:rgba(255,255,255,1)">
+        <div style="z-index: 4; position: absolute; left: 0%; top: 50%; width: 100.00%; height: 10.00%">
+            <div style="text-align:left; color:#000; ">
+                <DIV STYLE="text-align:center;"><SPAN
+                        STYLE="letter-spacing:0vmin;color:#777777;font-size:1.47vmin;font-family:Arial, Helvetica, sans-serif;">Loading
+                        virtual tour. Please wait...</SPAN></DIV>
+                <p STYLE="margin:0; line-height:1.35vmin;"><BR
+                        STYLE="letter-spacing:0vmin;color:#888888;font-size:1.35vmin;font-family:'Segoe UI';" /></p>
+            </div>
+        </div>
+    </div>
+    <div id="viewer"></div>
+
+    <div id="topActions">
+        <button title="Home" onclick="goHome()"><i class="fa-solid fa-house"></i></button>
+        <button title="Fullscreen" onclick="toggleFullscreen()"><i class="fa-solid fa-expand"></i></button>
+        <button class="utility-btn" id="audioBtn" onclick="toggleAudio()">
+            <i class="fa-solid fa-volume-xmark"></i>
+        </button>
+    </div>
+
+    <div id="floorNav">
+        <button data-floor="17th" onclick="switchFloor('17th')">17F</button>
+        <button data-floor="23rd" onclick="switchFloor('23rd')">23F</button>
+        <button data-floor="28th" onclick="switchFloor('28th')">28F</button>
+        <button data-floor="33rd" onclick="switchFloor('33rd')">33F</button>
+    </div>
+
+    <div id="roomNav"></div>
+
+    </body>
+
+</html>
